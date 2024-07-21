@@ -44,4 +44,20 @@
     <string name="create_account">Create Account</string>
     <string name="phone">Phone</string>
     <string name="register">Register</string>
+    <string name="profile_image">Profile image:</string>
+    <string name="username">Username:</string>
+    <string name="type_a_new_username">Type a new username</string>
+    <string name="type_a_new_email">Type a new Email</string>
+    <string name="type_a_new_password">Type a new password</string>
+    <string name="save">Save</string>
+    <string name="edit_details">Edit Details</string>
+    <string name="change_site">Change Site:</string>
+    <string name="type_new_site">Type a new Site</string>
+    <string name="change_username">Change Username</string>
+    <string name="change_note">Change Note:</string>
+    <string name="type_a_new_note">Type a new Note</string>
+    <string name="change_password">Change Password:</string>
+    <string name="add_password">Add Password</string>
+    <string name="note">Note:</string>
+    <string name="already_have_an_account_login">Already have an account? Login</string>
 </resources>

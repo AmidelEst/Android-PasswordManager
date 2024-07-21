@@ -142,7 +142,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:clickable="true"
-        android:text="Already have an account? Login"
+        android:text="@string/already_have_an_account_login"
         android:textColor="@color/text"
         android:textSize="14sp" />
 
