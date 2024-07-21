@@ -15,7 +15,6 @@
     <string name="confirm_logout">Confirm Logout</string>
     <string name="logout">Logout</string>
     <string name="delete_exclamation_mark">Delete!</string>
-    <string name="all_items_have_been_deleted">All Items have been deleted</string>
     <string name="user_one_will_be_shown_here">User One will be shown here</string>
     <string name="user_two_will_be_shown_here">User Two will be shown here</string>
     <string name="fetch_user">Fetch User</string>
