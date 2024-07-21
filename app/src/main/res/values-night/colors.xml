@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primaryColor">#FF512F</color>
+    <color name="hint_color_dark">#BDBDBD</color>
+    <color name="yellow">#FFE106</color>
+
+    <!-- Dark -->
+    <color name="button_background_dark">#A9A9C5</color>
+    <color name="logout">#FF4D4D</color>
+    <color name="primary">#A9A9C5</color>
+    <color name="secondary">#9EA3A9</color>
+    <color name="accent">#5A6B76</color>
+    <color name="background">#2E2E2E</color>
+    <color name="backgroundGradient">#2A2A2A</color>
+    <color name="text">#E0E0E0</color>
+    <color name="success">#39A64A</color>
+    <color name="error">#FF5C5C</color>
+
+
+</resources>

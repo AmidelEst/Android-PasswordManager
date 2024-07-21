@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "535560574945",
+    "project_id": "pswd-manager-dc2c3",
+    "storage_bucket": "pswd-manager-dc2c3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:535560574945:android:a86c5d6aaeed3d3c10e4a0",
+        "android_client_info": {
+          "package_name": "com.ponichTech.pswdManager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBj8dlEluRBqaDySMzmd1QvCwWQnV9Dft8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

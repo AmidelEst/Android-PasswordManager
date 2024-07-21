@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primaryColor">#FF512F</color>
+    <color name="hint_color_dark">#BDBDBD</color>
+    <color name="yellow">#FFE106</color>
+
+    <!-- Light -->
+    <color name="button_background_dark">#3A3A5B</color>
+    <color name="logout">#B71C1C</color>
+    <color name="primary">#2F4F4F</color>
+    <color name="secondary">#36454F</color>
+    <color name="accent">#708090</color>
+    <color name="background">#F5F5F5</color>
+    <color name="backgroundGradient">#30708090</color>
+    <color name="text">#343434</color>
+    <color name="success">#50C878</color>
+    <color name="error">#DC143C</color>
+
+
+</resources>

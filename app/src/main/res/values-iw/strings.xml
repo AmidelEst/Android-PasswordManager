@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">מנהל הסיסמאות</string>
+    <string name="add_button">הוסף כפתור</string>
+    <string name="enter_item_title">כותרת</string>
+    <string name="enter_item_description">תיאור</string>
+    <string name="pick_image">בחר תמונה</string>
+    <string name="finish">סיים</string>
+    <string name="item_image">תמונת פריט</string>
+    <string name="itemServiceName">צרכן</string>
+    <string name="item_detailed_description">תיאור סיסמא</string>
+    <string name="delete">מחק</string>
+    <string name="confirmation_delete_all">האם אתה בטוח שברצונך למחוק את כל הסיסמאות</string>
+    <string name="confirm_delete">אשר מחיקה</string>
+    <string name="confirm_logout">אשר יציאה</string>
+    <string name="logout">התנתק</string>
+    <string name="delete_exclamation_mark">מחק!</string>
+    <string name="all_items_have_been_deleted">כל הסיסמאות נמחקו</string>
+    <string name="enter_username">שם משתמש/אימייל</string>
+    <string name="enter_password">סיסמא</string>
+    <string name="enter_notes">הודעה</string>
+    <string name="sign_up_invitation">אין לך עדיין משתמש? לחץ כאן להירשם</string>
+    <string name="change_image">שנה תמונה</string>
+    <string name="settings">הגדרות</string>
+    <string name="profile">פרופיל</string>
+    <string name="home">בית</string>
+    <string name="my_passwords">הסיסמאות שלי</string>
+    <string name="my_profile">הפרופיל שלי</string>
+    <string name="name">שם:</string>
+    <string name="email">דוא\"ל:</string>
+    <string name="password">סיסמא:</string>
+    <string name="edit_profile">ערוך פרופיל</string>
+    <string name="log_out_buttonstring">התנתק</string>
+    <string name="change_to_dark_theme">החלף למצב לילה</string>
+    <string name="strongly_secured">הגנה חזקה</string>
+    <string name="enable_strong_secure">הפעל הגנה חזקה</string>
+</resources>
