@@ -39,4 +39,9 @@
     <string name="change_to_dark_theme">Change to dark theme</string>
     <string name="strongly_secured">Strongly secured:</string>
     <string name="enable_strong_secure">Enable strong secure</string>
+    <string name="welcome">Welcome</string>
+    <string name="login">Login</string>
+    <string name="create_account">Create Account</string>
+    <string name="phone">Phone</string>
+    <string name="register">Register</string>
 </resources>

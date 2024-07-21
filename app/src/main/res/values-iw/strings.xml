@@ -34,4 +34,9 @@
     <string name="change_to_dark_theme">החלף למצב לילה</string>
     <string name="strongly_secured">הגנה חזקה</string>
     <string name="enable_strong_secure">הפעל הגנה חזקה</string>
+    <string name="welcome">ברוכה הבאה</string>
+    <string name="login">התחברות</string>
+    <string name="create_account">צור משתמש</string>
+    <string name="phone">נייד</string>
+    <string name="register">הרשמה</string>
 </resources>
