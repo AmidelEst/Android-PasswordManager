@@ -14,7 +14,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/settingsLayoutContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <TextView
             android:id="@+id/settingsTitle"
@@ -69,7 +70,8 @@
                 android:id="@+id/stronglySecured"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layoutDirection="locale"
+                android:textDirection="locale"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/darktheme">
                 <TextView
@@ -84,7 +86,7 @@
                     android:id="@+id/stronglySecuredPassword"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
                     android:src="@drawable/password_icon"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/stronglySecuredLabel" />
@@ -92,11 +94,10 @@
                     android:id="@+id/plus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="6dp"
-                    android:paddingRight="2dp"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="2dp"
                     android:text="+"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/stronglySecuredFingerprint"
                     app:layout_constraintStart_toEndOf="@id/stronglySecuredPassword"
                     app:layout_constraintTop_toTopOf="parent" />
                 <ImageView
