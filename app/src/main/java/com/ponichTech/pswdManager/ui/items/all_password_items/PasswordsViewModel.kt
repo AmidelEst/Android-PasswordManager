@@ -121,17 +121,17 @@ class PasswordsViewModel(
         }
     }
 
-    class PasswordsViewModelFactory(
-        private val userRepository: UserRepository,
-        private val localRepository: PasswordsRepository,
-        private val firebaseRepository: PasswordsRepository
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(PasswordsViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return PasswordsViewModel(userRepository, localRepository, firebaseRepository) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
+}
+class PasswordsViewModelFactory(
+    private val userRepository: UserRepository,
+    private val localRepository: PasswordsRepository,
+    private val firebaseRepository: PasswordsRepository
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(PasswordsViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return PasswordsViewModel(userRepository, localRepository, firebaseRepository) as T
         }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

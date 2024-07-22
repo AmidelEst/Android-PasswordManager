@@ -29,7 +29,7 @@ class AllPasswordsFragment : Fragment() {
     private var binding: FragmentAllPasswordsItemsBinding by autoCleared()
 
     private val viewModel: PasswordsViewModel by activityViewModels {
-        PasswordsViewModel.PasswordsViewModelFactory(
+        PasswordsViewModelFactory(
             UserRepositoryFirebase(),
             PasswordLocalRepository(PasswordItemDatabase.getDatabase(requireContext()).passwordItemDao()),
             PasswordFirebaseRepository()
@@ -44,6 +44,24 @@ class AllPasswordsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAllPasswordsItemsBinding.inflate(inflater, container, false)
+
+        viewModel.passwordItems.observe(viewLifecycleOwner, Observer { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    binding.progressBar.isVisible = true
+                }
+                is Resource.Success -> {
+                    binding.progressBar.isVisible = false
+                    resource.data?.let { adapter.setPasswordItems(it) }
+                }
+                is Resource.Error -> {
+                    binding.progressBar.isVisible = false
+                    Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+
+        // allPasswords -> addPasswords
         binding.fab.setOnClickListener {
             findNavController().navigate(R.id.action_allItemsFragment_to_addItemFragment)
         }
@@ -112,20 +130,5 @@ class AllPasswordsFragment : Fragment() {
             }
         })
 
-        viewModel.passwordItems.observe(viewLifecycleOwner, Observer { resource ->
-            when (resource) {
-                is Resource.Loading -> {
-                    binding.progressBar.isVisible = true
-                }
-                is Resource.Success -> {
-                    binding.progressBar.isVisible = false
-                    resource.data?.let { adapter.setPasswordItems(it) }
-                }
-                is Resource.Error -> {
-                    binding.progressBar.isVisible = false
-                    Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
     }
 }

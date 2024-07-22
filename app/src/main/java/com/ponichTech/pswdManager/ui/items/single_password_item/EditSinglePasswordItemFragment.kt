@@ -11,12 +11,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
+import com.ponichTech.pswdManager.R
 import com.ponichTech.pswdManager.data.local_db.PasswordItemDatabase
 import com.ponichTech.pswdManager.data.repository.firebase.PasswordFirebaseRepository
 import com.ponichTech.pswdManager.data.repository.firebase.UserRepositoryFirebase
 import com.ponichTech.pswdManager.data.repository.local_Repo.PasswordLocalRepository
 import com.ponichTech.pswdManager.databinding.EditSinglePasswordItemBinding
 import com.ponichTech.pswdManager.ui.items.all_password_items.PasswordsViewModel
+import com.ponichTech.pswdManager.ui.items.all_password_items.PasswordsViewModelFactory
 import com.ponichTech.pswdManager.utils.autoCleared
 
 class EditSinglePasswordFragment : Fragment() {
@@ -26,7 +28,7 @@ class EditSinglePasswordFragment : Fragment() {
     private var imageUri: Uri? = null
 
     private val viewModel: PasswordsViewModel by activityViewModels {
-        PasswordsViewModel.PasswordsViewModelFactory(
+        PasswordsViewModelFactory(
             UserRepositoryFirebase(),
             PasswordLocalRepository(PasswordItemDatabase.getDatabase(requireContext()).passwordItemDao()),
             PasswordFirebaseRepository()
@@ -44,55 +46,54 @@ class EditSinglePasswordFragment : Fragment() {
             }
         }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = EditSinglePasswordItemBinding
-            .inflate(inflater, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = EditSinglePasswordItemBinding.inflate(inflater, container, false)
 
         binding.imageBtn.setOnClickListener {
             pickImageLauncher.launch(arrayOf("image/*"))
         }
 
+        // Observing the selected password item
         viewModel.selectedPasswordItem.observe(viewLifecycleOwner) { item ->
             item?.let {
                 binding.serviceName.setText(it.serviceName)
                 binding.userName.setText(it.username)
                 binding.userNote.setText(it.notes)
                 binding.userPassword.setText(it.password)
-                // Load photo using Glide with circular crop
-                Glide.with(requireContext()).load(it.photo).circleCrop().override(100, 100)
-                    .into(binding.resultImage)
 
+                // Load photo using Glide with circular crop
+                Glide.with(requireContext())
+                    .load(it.photo)
+                    .error(R.drawable.ic_launcher_foreground) // Error image if loading fails
+                    .circleCrop()
+                    .override(100, 100)
+                    .into(binding.resultImage)
             }
         }
+
+        // Save changes button
         binding.btnSaveChanges.setOnClickListener {
             viewModel.selectedPasswordItem.value?.let { item ->
                 val updatedServiceName = binding.serviceName.text.toString()
                 val updatedUserName = binding.userName.text.toString()
                 val updatedNotes = binding.userNote.text.toString()
-                val updatePassword = binding.userPassword.text.toString()
-                val updatedImageUri = imageUri.toString()
+                val updatedPassword = binding.userPassword.text.toString()
+                val updatedImageUri = imageUri?.toString() ?: item.photo
+
                 // Create an updated Password object
-                val updatedPassword = item.copy(
+                val updatedPasswordItem = item.copy(
                     serviceName = updatedServiceName,
                     username = updatedUserName,
                     notes = updatedNotes,
-                    password = updatePassword,
+                    password = updatedPassword,
                     photo = updatedImageUri
                 )
 
-                // Update the password in Firebase
-                viewModel.updatePasswordItem(updatedPassword)
+                // Update the password item in Firebase and local repository
+                viewModel.updatePasswordItem(updatedPasswordItem)
             }
-
         }
+
         return binding.root
     }
 }
-
-
-
-

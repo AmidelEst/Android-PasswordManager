@@ -1,5 +1,6 @@
 package com.ponichTech.pswdManager.ui.items.all_password_items
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,21 +10,17 @@ import com.ponichTech.pswdManager.R
 import com.ponichTech.pswdManager.data.model.PasswordItem
 import com.ponichTech.pswdManager.databinding.PasswordItemLayoutBinding
 
-// Adapter for displaying PasswordItems in a RecyclerView
 class PasswordsAdapter(val callBack: PasswordListener)
     : RecyclerView.Adapter<PasswordsAdapter.PassItemViewHolder>() {
 
-    // List to hold PasswordItems
     private val passItems = ArrayList<PasswordItem>()
 
-    // Sets the PasswordItems to be displayed in the RecyclerView
     fun setPasswordItems(passItems: Collection<PasswordItem>) {
-        this.passItems.clear() // Clear the existing items
-        this.passItems.addAll(passItems) // Add the new items
+        this.passItems.clear()
+        this.passItems.addAll(passItems)
         notifyDataSetChanged() // Notify the adapter to refresh the view
     }
 
-    // Listener interface for handling item click and long click events
     interface PasswordListener {
         fun onItemClicked(passItems: PasswordItem) // Handle item click
         fun onItemLongClicked(passItems: PasswordItem) // Handle item long click
@@ -45,11 +42,16 @@ class PasswordsAdapter(val callBack: PasswordListener)
         fun bind(item: PasswordItem) {
             binding.itemServiceName.text = item.serviceName // Set service name
             binding.itemUserName.text = item.username // Set username
+
+            // Log the image URL for debugging
+            Log.d("PasswordsAdapter", "Loading image from URL: ${item.photo}")
+
             // Load photo using Glide with circular crop
-            Glide.with(binding.root).load(item.photo)
-                .placeholder(R.drawable.ic_launcher_foreground) // Placeholder while loading
-                .error(R.drawable.ic_launcher_foreground).override(200, 200).circleCrop() // Error image if loading fails
-                .override(200, 200).circleCrop() // Set the desired width and height in pixels
+            Glide.with(binding.root.context)
+                .load(item.photo)
+                .error(R.drawable.ic_launcher_foreground)// Error image if loading fails
+                .override(200, 200)
+                .circleCrop() // Set the desired width and height in pixels
                 .into(binding.itemImage)
         }
 
@@ -65,10 +67,10 @@ class PasswordsAdapter(val callBack: PasswordListener)
         }
     }
 
-    // Returns the PasswordItem at the specified position
+
     fun itemAt(position: Int) = passItems[position]
 
-    // Creates a new ViewHolder when there are no existing ViewHolders that can be reused
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PassItemViewHolder(
             PasswordItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)

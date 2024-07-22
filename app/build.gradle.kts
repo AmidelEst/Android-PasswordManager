@@ -77,10 +77,10 @@ dependencies {
     implementation(libs.passwordstrength)
 
     //UI
-    implementation(libs.glide)
-    annotationProcessor(libs.glide.compiler)
     implementation(libs.material)
     implementation(libs.material3)
+    implementation(libs.glide)
+    annotationProcessor(libs.glide.compiler)
     //junit
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

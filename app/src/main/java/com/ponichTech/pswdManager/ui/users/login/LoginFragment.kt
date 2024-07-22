@@ -17,6 +17,7 @@ import com.ponichTech.pswdManager.data.repository.firebase.UserRepositoryFirebas
 import com.ponichTech.pswdManager.data.repository.local_Repo.PasswordLocalRepository
 import com.ponichTech.pswdManager.databinding.FragmentLoginBinding
 import com.ponichTech.pswdManager.ui.items.all_password_items.PasswordsViewModel
+import com.ponichTech.pswdManager.ui.items.all_password_items.PasswordsViewModelFactory
 import com.ponichTech.pswdManager.utils.Resource
 
 class LoginFragment : Fragment() {
@@ -26,7 +27,7 @@ class LoginFragment : Fragment() {
         LoginViewModel.Factory(UserRepositoryFirebase())
     }
     private val passwordsViewModel: PasswordsViewModel by activityViewModels {
-        PasswordsViewModel.PasswordsViewModelFactory(
+        PasswordsViewModelFactory(
             UserRepositoryFirebase(),
             PasswordLocalRepository(
                 PasswordItemDatabase.getDatabase(requireContext()).passwordItemDao()
