@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
+        //Swipe bar background
         val color = ContextCompat.getColor(this, R.color.background)
         window.navigationBarColor = color
 
