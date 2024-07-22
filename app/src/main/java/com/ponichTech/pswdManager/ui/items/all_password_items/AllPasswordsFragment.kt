@@ -37,11 +37,8 @@ class AllPasswordsFragment : Fragment() {
     }
 
     private lateinit var adapter: PasswordsAdapter
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+    //1) CreateView
+    override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?
     ): View {
         binding = FragmentAllPasswordsItemsBinding.inflate(inflater, container, false)
 
@@ -67,7 +64,7 @@ class AllPasswordsFragment : Fragment() {
         }
         return binding.root
     }
-
+    //2)ViewCreated
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

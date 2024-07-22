@@ -66,7 +66,6 @@ class EditSinglePasswordFragment : Fragment() {
                     .load(it.photo)
                     .error(R.drawable.ic_launcher_foreground) // Error image if loading fails
                     .circleCrop()
-                    .override(100, 100)
                     .into(binding.resultImage)
             }
         }
