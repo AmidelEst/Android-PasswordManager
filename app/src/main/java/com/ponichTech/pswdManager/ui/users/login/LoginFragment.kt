@@ -26,12 +26,10 @@ class LoginFragment : Fragment() {
     private val loginViewModel: LoginViewModel by viewModels {
         LoginViewModel.Factory(UserRepositoryFirebase())
     }
-    private val passwordsViewModel: PasswordsViewModel by activityViewModels {
+    private val viewModel: PasswordsViewModel by activityViewModels {
         PasswordsViewModelFactory(
+            requireActivity().application,
             UserRepositoryFirebase(),
-            PasswordLocalRepository(
-                PasswordItemDatabase.getDatabase(requireContext()).passwordItemDao()
-            ),
             PasswordFirebaseRepository()
         )
     }
@@ -52,13 +50,13 @@ class LoginFragment : Fragment() {
             val password = binding?.etPassword?.text.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
-                loginViewModel.loginUser(email, password, passwordsViewModel)
+                loginViewModel.loginUser(email, password, viewModel)
             } else {
                 Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show()
             }
         }
 
-        passwordsViewModel.currentUser.observe(viewLifecycleOwner) { resource ->
+        viewModel.currentUser.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success -> {
                     Toast.makeText(requireContext(), "Login successful", Toast.LENGTH_SHORT).show()

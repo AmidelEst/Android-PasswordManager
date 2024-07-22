@@ -25,8 +25,8 @@ class DetailPasswordItemFragment : Fragment() {
 
     private val viewModel: PasswordsViewModel by activityViewModels {
         PasswordsViewModelFactory(
+            requireActivity().application,
             UserRepositoryFirebase(),
-            PasswordLocalRepository(PasswordItemDatabase.getDatabase(requireContext()).passwordItemDao()),
             PasswordFirebaseRepository()
         )
     }

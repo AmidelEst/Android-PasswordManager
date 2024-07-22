@@ -7,7 +7,7 @@ import com.ponichTech.pswdManager.utils.Resource
 // Interface defining the operations for managing PasswordItem data
 interface PasswordsRepository {
 
-    suspend fun addPassword(item: PasswordItem):Resource<Unit>
+    suspend fun addPassword(item: PasswordItem):Resource<*>
     suspend fun updatePassword(item: PasswordItem):Resource<Unit>
     suspend fun deletePassword(item: PasswordItem): Resource<Unit>
     suspend fun getPassword(id: String): Resource<PasswordItem>

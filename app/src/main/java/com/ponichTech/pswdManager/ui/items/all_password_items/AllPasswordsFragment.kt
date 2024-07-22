@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ponichTech.pswdManager.R
-import com.ponichTech.pswdManager.data.local_db.PasswordItemDatabase
 import com.ponichTech.pswdManager.data.model.PasswordItem
 import com.ponichTech.pswdManager.data.repository.firebase.PasswordFirebaseRepository
 import com.ponichTech.pswdManager.data.repository.firebase.UserRepositoryFirebase
@@ -30,8 +29,8 @@ class AllPasswordsFragment : Fragment() {
 
     private val viewModel: PasswordsViewModel by activityViewModels {
         PasswordsViewModelFactory(
+            requireActivity().application,
             UserRepositoryFirebase(),
-            PasswordLocalRepository(PasswordItemDatabase.getDatabase(requireContext()).passwordItemDao()),
             PasswordFirebaseRepository()
         )
     }

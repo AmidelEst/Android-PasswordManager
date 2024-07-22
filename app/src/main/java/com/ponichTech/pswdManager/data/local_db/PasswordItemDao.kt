@@ -7,11 +7,12 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import com.ponichTech.pswdManager.data.model.PasswordItem
 
 @Dao
 interface PasswordItemDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun addPassword(item: PasswordItem)
 
     @Delete

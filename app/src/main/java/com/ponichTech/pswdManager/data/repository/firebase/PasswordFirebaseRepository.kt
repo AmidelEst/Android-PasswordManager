@@ -53,7 +53,7 @@ class PasswordFirebaseRepository : PasswordsRepository {
     }
 
     // Retrieves PasswordItems and posts the result to the given LiveData
-    override fun getPasswordsLiveData(userId: String): LiveData<Resource<List<PasswordItem>>> {
+    override fun getPasswordsLiveData(userId: String):LiveData<Resource<List<PasswordItem>>>{
         data.postValue(Resource.Loading())
 
         // Add a snapshot listener to get real-time updates
