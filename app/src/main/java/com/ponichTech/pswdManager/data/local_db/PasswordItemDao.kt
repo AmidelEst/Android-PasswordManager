@@ -12,20 +12,20 @@ import com.ponichTech.pswdManager.data.model.PasswordItem
 @Dao
 interface PasswordItemDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addPassItem(item: PasswordItem)
+    suspend fun addPassword(item: PasswordItem)
 
     @Delete
-    suspend fun deletePassItem(vararg items: PasswordItem)
+    suspend fun deletePassword(vararg items: PasswordItem)
 
     @Update
-    suspend fun updatePassItem(item: PasswordItem)
+    suspend fun updatePassword(item: PasswordItem)
 
-    @Query("SELECT * from password_items order by serviceName ASC")
-    fun getPassItems():LiveData<List<PasswordItem>>
+    @Query("SELECT * FROM password_items WHERE userId = :userId order by serviceName ASC")
+    fun getPasswordsLiveData(userId: String):LiveData<List<PasswordItem>>
 
     @Query("SELECT * from password_items where id like :id")
-    suspend fun getPassItem(id:Int): PasswordItem
+    suspend fun getPassword(id:String): PasswordItem
 
     @Query("DELETE from password_items")
-    suspend fun deleteAllPassItems()
+    suspend fun deleteAllPasswords()
 }

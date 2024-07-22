@@ -1,15 +1,17 @@
 package com.ponichTech.pswdManager.ui.users.register
 
 import android.util.Patterns
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.ponichTech.pswdManager.data.model.User
+import com.ponichTech.pswdManager.data.repository.interfaces.UserRepository
 import com.ponichTech.pswdManager.utils.Resource
-import com.ponichTech.pswdManager.data.repository.interfaces.AuthRepository
-import com.ponichTech.pswdManager.ui.items.all_password_items.SharedViewModel
 import kotlinx.coroutines.launch
 
-class RegisterViewModel(private val repository: AuthRepository) : ViewModel() {
+class RegisterViewModel(private val repository: UserRepository) : ViewModel() {
 
     private val _userRegistrationStatus = MutableLiveData<Resource<User>>()
     val userRegistrationStatus: LiveData<Resource<User>> = _userRegistrationStatus
@@ -32,7 +34,7 @@ class RegisterViewModel(private val repository: AuthRepository) : ViewModel() {
 
     }
 
-    class RegisterViewModelFactory(private val repo: AuthRepository) : ViewModelProvider.NewInstanceFactory() {
+    class RegisterViewModelFactory(private val repo: UserRepository) : ViewModelProvider.NewInstanceFactory() {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")

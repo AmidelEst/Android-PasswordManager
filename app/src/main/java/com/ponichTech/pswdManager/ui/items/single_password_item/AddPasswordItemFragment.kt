@@ -10,28 +10,28 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ponichTech.pswdManager.R
+import com.ponichTech.pswdManager.data.local_db.PasswordItemDatabase
 import com.ponichTech.pswdManager.data.model.PasswordItem
-import com.ponichTech.pswdManager.data.repository.firebase.AuthRepositoryFirebase
-import com.ponichTech.pswdManager.data.repository.firebase.PasswordItemRepositoryFirebase
+import com.ponichTech.pswdManager.data.repository.firebase.PasswordFirebaseRepository
+import com.ponichTech.pswdManager.data.repository.firebase.UserRepositoryFirebase
+import com.ponichTech.pswdManager.data.repository.local_Repo.PasswordLocalRepository
 import com.ponichTech.pswdManager.databinding.FragmentAddPasswordItemBinding
-import com.ponichTech.pswdManager.ui.items.all_password_items.SharedViewModel
-import com.ponichTech.pswdManager.ui.items.passwords_view_model.FirebasePasswordItemsViewModel
+import com.ponichTech.pswdManager.ui.items.all_password_items.PasswordsViewModel
+import com.ponichTech.pswdManager.utils.autoCleared
 
 class AddPasswordItemFragment : Fragment() {
 
-    private var _binding: FragmentAddPasswordItemBinding? = null
-    private val binding get() = _binding!!
-    private val sharedViewModel: SharedViewModel by activityViewModels()
+    private var binding: FragmentAddPasswordItemBinding by autoCleared()
 
     private var imageUri: Uri? = null
 
-    private val viewModel: FirebasePasswordItemsViewModel by viewModels {
-        FirebasePasswordItemsViewModel.FirebasePasswordItemsViewModelFactory(
-            AuthRepositoryFirebase(),
-            PasswordItemRepositoryFirebase()
+    private val viewModel: PasswordsViewModel by activityViewModels {
+        PasswordsViewModel.PasswordsViewModelFactory(
+            UserRepositoryFirebase(),
+            PasswordLocalRepository(PasswordItemDatabase.getDatabase(requireContext()).passwordItemDao()),
+            PasswordFirebaseRepository()
         )
     }
 
@@ -49,7 +49,7 @@ class AddPasswordItemFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAddPasswordItemBinding
+        binding = FragmentAddPasswordItemBinding
             .inflate(inflater, container, false)
 
         binding.finishBtn.setOnClickListener {
@@ -60,10 +60,10 @@ class AddPasswordItemFragment : Fragment() {
                 password = binding.passwordInput.text.toString(),
                 notes = binding.notesInput.text.toString(),
                 photo = imageUri.toString(),
-                userId =sharedViewModel.userId.value.toString()
+                userId =viewModel.currentUser.value?.data?.userId.toString()
             )
 
-            viewModel.addPassItem(passwordItem)
+            viewModel.addPasswordItem(passwordItem)
             findNavController().navigate(
                 R.id.action_addItemFragment_to_allItemsFragment
             )
@@ -97,10 +97,6 @@ class AddPasswordItemFragment : Fragment() {
         return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }
 
 

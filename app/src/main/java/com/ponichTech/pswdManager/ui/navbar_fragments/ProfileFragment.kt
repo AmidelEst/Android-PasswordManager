@@ -5,49 +5,45 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.ponichTech.pswdManager.R
-import com.ponichTech.pswdManager.data.repository.firebase.AuthRepositoryFirebase
-import com.ponichTech.pswdManager.data.repository.firebase.PasswordItemRepositoryFirebase
+import com.ponichTech.pswdManager.data.local_db.PasswordItemDatabase
+import com.ponichTech.pswdManager.data.repository.firebase.PasswordFirebaseRepository
+import com.ponichTech.pswdManager.data.repository.firebase.UserRepositoryFirebase
+import com.ponichTech.pswdManager.data.repository.local_Repo.PasswordLocalRepository
 import com.ponichTech.pswdManager.databinding.ProfileBinding
-import com.ponichTech.pswdManager.ui.items.passwords_view_model.FirebasePasswordItemsViewModel
+import com.ponichTech.pswdManager.ui.items.all_password_items.PasswordsViewModel
+import com.ponichTech.pswdManager.utils.autoCleared
 
 
 class ProfileFragment : Fragment() {
 
-    private var _binding: ProfileBinding? = null
-    private val binding get() = _binding!!
+    private var binding: ProfileBinding by autoCleared()
 
-    private val viewModel: FirebasePasswordItemsViewModel by viewModels {
-        FirebasePasswordItemsViewModel.FirebasePasswordItemsViewModelFactory(
-            AuthRepositoryFirebase(),
-            PasswordItemRepositoryFirebase()
+    private val viewModel: PasswordsViewModel by activityViewModels {
+        PasswordsViewModel.PasswordsViewModelFactory(
+            UserRepositoryFirebase(),
+            PasswordLocalRepository(PasswordItemDatabase.getDatabase(requireContext()).passwordItemDao()),
+            PasswordFirebaseRepository()
         )
     }
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = ProfileBinding
-            .inflate(inflater, container, false)
 
+    //1)CreateView
+    override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?
+    ): View {
+        binding = ProfileBinding.inflate(inflater, container, false)
+
+        //Profile -> login
         binding.logoutButton.setOnClickListener{
-            viewModel.signOut()
+            viewModel.logoutUser()
             findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
         }
-
+        //Profile -> editProfile
         binding.editProfileButton.setOnClickListener{
             findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment)
         }
-
         return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
 }

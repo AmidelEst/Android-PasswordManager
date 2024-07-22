@@ -10,8 +10,8 @@ import com.ponichTech.pswdManager.data.model.PasswordItem
 import com.ponichTech.pswdManager.databinding.PasswordItemLayoutBinding
 
 // Adapter for displaying PasswordItems in a RecyclerView
-class PasswordItemAdapter(val callBack: PassItemListener)
-    : RecyclerView.Adapter<PasswordItemAdapter.PassItemViewHolder>() {
+class PasswordsAdapter(val callBack: PasswordListener)
+    : RecyclerView.Adapter<PasswordsAdapter.PassItemViewHolder>() {
 
     // List to hold PasswordItems
     private val passItems = ArrayList<PasswordItem>()
@@ -24,7 +24,7 @@ class PasswordItemAdapter(val callBack: PassItemListener)
     }
 
     // Listener interface for handling item click and long click events
-    interface PassItemListener {
+    interface PasswordListener {
         fun onItemClicked(passItems: PasswordItem) // Handle item click
         fun onItemLongClicked(passItems: PasswordItem) // Handle item long click
     }

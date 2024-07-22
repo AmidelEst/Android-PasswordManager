@@ -1,13 +1,11 @@
 package com.ponichTech.pswdManager.ui
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -16,7 +14,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.FirebaseApp
 import com.ponichTech.pswdManager.R
 import com.ponichTech.pswdManager.databinding.ActivityMainBinding
-
 
 
 class MainActivity : AppCompatActivity() {

@@ -15,11 +15,9 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.biometric.BiometricPrompt
 import androidx.biometric.BiometricPrompt.PromptInfo
 import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.recreate
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.ponichTech.pswdManager.R
-
 import com.ponichTech.pswdManager.databinding.SettingsBinding
 
 

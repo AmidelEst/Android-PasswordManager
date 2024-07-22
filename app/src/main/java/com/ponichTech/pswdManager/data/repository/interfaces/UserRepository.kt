@@ -4,7 +4,7 @@ import com.ponichTech.pswdManager.data.model.User
 import com.ponichTech.pswdManager.utils.Resource
 
 
-interface AuthRepository {
+interface UserRepository {
 
 
     suspend fun getCurrentUser() : Resource<User>

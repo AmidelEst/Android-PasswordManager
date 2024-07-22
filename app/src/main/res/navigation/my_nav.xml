@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/allPasswordsFragment"
-        android:name="com.ponichTech.pswdManager.ui.items.all_password_items.AllPasswordItemsFragment"
+        android:name="com.ponichTech.pswdManager.ui.items.all_password_items.AllPasswordsFragment"
         android:label="all_items_layout"
         tools:layout="@layout/fragment_all_passwords_items" >
         <action
