@@ -21,7 +21,7 @@
             android:layout_gravity="center"
             android:fontFamily="sans-serif-medium"
             android:padding="32dp"
-            android:text="Welcome"
+            android:text="@string/welcome"
             android:textColor="@color/text"
             android:textSize="32sp"
             android:textStyle="bold"
@@ -36,7 +36,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
+            android:hint="@string/email"
             app:boxBackgroundMode="filled"
             app:boxCornerRadiusBottomEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Password"
+            android:hint="@string/password"
             app:boxBackgroundMode="filled"
             app:boxCornerRadiusBottomEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
@@ -84,7 +84,7 @@
             android:backgroundTint="@color/secondary"
             android:fontFamily="sans-serif-medium"
             android:padding="16dp"
-            android:text="Login"
+            android:text="@string/login"
             android:textColor="@android:color/white"
             android:textStyle="bold" />
 
