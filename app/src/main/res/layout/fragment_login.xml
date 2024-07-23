@@ -10,6 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/gradient_background_dark"
         android:padding="24dp">
 
         <TextView
@@ -21,19 +22,21 @@
             android:padding="32dp"
             android:text="@string/welcome"
             android:textColor="@color/text"
-            android:textSize="32sp"
+            android:textSize="28sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/content"
+            android:id="@+id/loginCredentialsContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tvWelcome">
+            app:layout_constraintTop_toBottomOf="@id/tvWelcome"
+            tools:layout_editor_absoluteX="24dp">
+
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/email_input"
+                android:id="@+id/tl_email_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
@@ -44,9 +47,10 @@
                 app:boxCornerRadiusTopStart="8dp"
                 app:boxStrokeColor="@android:color/white"
                 app:hintTextColor="@color/hint_color_dark"
-                app:layout_constraintTop_toTopOf="parent"
-                >
+                app:layout_constraintTop_toTopOf="parent">
+
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/email_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
@@ -56,21 +60,22 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passwordInput"
+                android:id="@+id/tl_password_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:hint="@string/password"
                 app:boxBackgroundMode="filled"
-                android:layout_marginTop="16dp"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
                 app:boxCornerRadiusTopStart="8dp"
                 app:boxStrokeColor="@color/button_background_dark"
                 app:hintTextColor="@color/hint_color_dark"
-                app:layout_constraintTop_toBottomOf="@+id/email_input">
+                app:layout_constraintTop_toBottomOf="@id/tl_email_input">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
@@ -90,30 +95,32 @@
                 android:text="@string/login"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/passwordInput"/>
+                app:layout_constraintTop_toBottomOf="@id/tl_password_input" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
 
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/loginProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:visibility="gone"
-            app:indicatorSize="48dp"
-            app:trackThickness="4dp"
             app:indicatorColor="@color/white"
+            app:indicatorSize="48dp"
+            app:layout_constraintBottom_toTopOf="@+id/tvSignup"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginCredentialsContent"
             app:trackColor="@color/yellow"
-            android:layout_gravity="center" />
+            app:trackThickness="4dp" />
 
         <TextView
             android:id="@+id/tvSignup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="36dp"
             android:clickable="true"
             android:focusable="true"
             android:fontFamily="sans-serif"
@@ -122,6 +129,8 @@
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

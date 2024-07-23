@@ -1,6 +1,7 @@
 package com.ponichTech.pswdManager.ui.users.login
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.play.core.integrity.d
 import com.ponichTech.pswdManager.R
 import com.ponichTech.pswdManager.data.repository.passwords_repository.PasswordFirebaseRepository
 import com.ponichTech.pswdManager.data.repository.user_repository.UserRepositoryFirebase
@@ -21,6 +23,10 @@ import com.ponichTech.pswdManager.utils.autoCleared
 class LoginFragment : Fragment() {
 
     private var binding: FragmentLoginBinding by autoCleared()
+
+    private val loginViewModel: LoginViewModel by viewModels {
+        LoginViewModel.Factory(UserRepositoryFirebase())
+    }
 
     private val viewModel: PasswordsViewModel by activityViewModels {
         PasswordsViewModel.Factory(
@@ -45,10 +51,11 @@ class LoginFragment : Fragment() {
 
         binding.btnLogin.setOnClickListener {
             val email = binding.emailInput.text.toString()
+            Log.d("D",email)
             val password = binding.passwordInput.text.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
-                viewModel.loginUser(email, password)
+                loginViewModel.loginUser(email, password,viewModel)
             } else {
                 Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show()
             }
@@ -67,6 +74,8 @@ class LoginFragment : Fragment() {
                 }
                 is Resource.Error -> {
                     Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                    binding.loginProgressBar.isVisible = false
+                    binding.btnLogin.isEnabled = true
                 }
                 is Resource.Loading -> {
                     binding.loginProgressBar.isVisible = true

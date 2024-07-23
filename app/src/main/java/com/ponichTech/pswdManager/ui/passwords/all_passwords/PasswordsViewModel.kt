@@ -46,20 +46,16 @@ class PasswordsViewModel(
 
     private fun fetchCurrentUser() {
         viewModelScope.launch {
-            if (_currentUser.value == null) {
-                _currentUser.value = Resource.Loading()
-                val result = userRepository.getCurrentUser()
+            _currentUser.value = Resource.Loading()
+            val result = userRepository.getCurrentUser()
 
-                if (result is Resource.Success) {
-                    result.data?.let { fetchPasswordItems(it.userId) }
-                    _currentUser.value = result
-                } else {
-                    _currentUser.value = Resource.Error("Failed to fetch user")
-                }
+            if (result is Resource.Success) {
+                result.data?.let { fetchPasswordItems(it.userId) }
+                _currentUser.value = result
+            } else {
+                _currentUser.value = Resource.Error("Failed to fetch user")
             }
-            else{
-                _currentUser.value = Resource.Error("Try login/register")
-            }
+
         }
     }
 
