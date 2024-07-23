@@ -20,8 +20,8 @@ fun mapFirebaseErrorCodeToMessage(errorCode: String): String {
     return when (errorCode) {
         "ERROR_INVALID_CUSTOM_TOKEN" -> "The custom token format is incorrect. Please check the documentation."
         "ERROR_CUSTOM_TOKEN_MISMATCH" -> "The custom token corresponds to a different audience."
-        "ERROR_INVALID_CREDENTIAL" -> "The supplied auth credential is malformed or has expired."
-        "ERROR_INVALID_EMAIL" -> "The email address is badly formatted."
+        "ERROR_INVALID_CREDENTIAL" -> "The supplied credential are malformed."
+        "ERROR_INVALID_EMAIL" -> "email address is badly formatted."
         "ERROR_WRONG_PASSWORD" -> "The password is invalid or the user does not have a password."
         "ERROR_USER_MISMATCH" -> "The supplied credentials do not correspond to the previously signed in user."
         "ERROR_REQUIRES_RECENT_LOGIN" -> "This operation is sensitive and requires recent authentication. Log in again before retrying this request."
