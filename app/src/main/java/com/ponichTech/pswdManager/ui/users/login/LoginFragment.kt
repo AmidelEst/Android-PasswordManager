@@ -56,6 +56,10 @@ class LoginFragment : Fragment() {
             }
         }
 
+        binding?.tvSignup?.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        }
+
         viewModel.currentUser.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success -> {
