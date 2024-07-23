@@ -15,7 +15,6 @@ import com.ponichTech.pswdManager.databinding.ProfileBinding
 import com.ponichTech.pswdManager.ui.passwords.all_passwords.PasswordsViewModel
 import com.ponichTech.pswdManager.utils.autoCleared
 
-
 class ProfileFragment : Fragment() {
 
     private var binding: ProfileBinding by autoCleared()

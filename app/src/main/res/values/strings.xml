@@ -15,10 +15,6 @@
     <string name="confirm_logout">Confirm Logout</string>
     <string name="logout">Logout</string>
     <string name="delete_exclamation_mark">Delete!</string>
-    <string name="user_one_will_be_shown_here">User One will be shown here</string>
-    <string name="user_two_will_be_shown_here">User Two will be shown here</string>
-    <string name="fetch_user">Fetch User</string>
-    <string name="log_out">Log-out</string>
     <string name="enter_service_name">Site or App</string>
     <string name="enter_username">Username/Email</string>
     <string name="enter_password">password</string>

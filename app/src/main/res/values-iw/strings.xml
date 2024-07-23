@@ -56,4 +56,5 @@
     <string name="add_password">הוסף סיסמה</string>
     <string name="note">הודעה:</string>
     <string name="already_have_an_account_login">כבר יש לך משתמש? לחץ כאן להתחבר</string>
+    <string name="confirmation_logout">האם אתה בטוח שברצונך למחוק את כל הפריטים?</string>
 </resources>
