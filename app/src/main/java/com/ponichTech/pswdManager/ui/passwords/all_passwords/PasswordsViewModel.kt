@@ -46,20 +46,26 @@ class PasswordsViewModel(
 
     private fun fetchCurrentUser() {
         viewModelScope.launch {
-            _currentUser.value = Resource.Loading()
-            val result = userRepository.getCurrentUser()
-            if (result is Resource.Success) {
-                result.data?.let { fetchPasswordItems(it.userId) }
-                _currentUser.value = result
-            } else {
-                _currentUser.value = Resource.Error("Failed to fetch user")
+            if (_currentUser.value != null) {
+                _currentUser.value = Resource.Loading()
+                val result = userRepository.getCurrentUser()
+
+                if (result is Resource.Success) {
+                    result.data?.let { fetchPasswordItems(it.userId) }
+                    _currentUser.value = result
+                } else {
+                    _currentUser.value = Resource.Error("Failed to fetch user")
+                }
+            }
+            else{
+                _currentUser.value = Resource.Error("Try login/register")
             }
         }
     }
 
     fun fetchPasswordItems(userId: String) {
         _passwordItems.value = Resource.Loading()
-        syncPasswords( userId)
+        syncPasswords(userId)
         localRepository.getPasswordsLiveData(userId).observeForever { resource ->
             _passwordItems.value = resource
         }
@@ -156,7 +162,8 @@ class PasswordsViewModel(
             val remotePasswordsLiveData = firebaseRepository.getPasswordsLiveData(userId)
 
             // Observe both LiveData objects simultaneously
-            val mediatorLiveData = MediatorLiveData<Pair<List<PasswordItem>?, List<PasswordItem>?>>()
+            val mediatorLiveData =
+                MediatorLiveData<Pair<List<PasswordItem>?, List<PasswordItem>?>>()
 
             mediatorLiveData.addSource(localPasswordsLiveData) { localPasswords ->
                 mediatorLiveData.value = Pair(localPasswords, mediatorLiveData.value?.second)
@@ -164,7 +171,8 @@ class PasswordsViewModel(
 
             mediatorLiveData.addSource(remotePasswordsLiveData) { remoteResource ->
                 if (remoteResource is Resource.Success) {
-                    mediatorLiveData.value = Pair(mediatorLiveData.value?.first, remoteResource.data)
+                    mediatorLiveData.value =
+                        Pair(mediatorLiveData.value?.first, remoteResource.data)
                 } else {
                     _operationStatus.value = Resource.Error("Failed to fetch remote passwords")
                 }
@@ -184,7 +192,8 @@ class PasswordsViewModel(
                     }
 
                     // Update LiveData to notify UI
-                    val updatedList = localPasswords.toMutableList().apply { addAll(missingPasswords) }
+                    val updatedList =
+                        localPasswords.toMutableList().apply { addAll(missingPasswords) }
                     _passwordItems.value = Resource.Success(updatedList)
 
                     // Clear sources to avoid memory leaks
@@ -196,6 +205,7 @@ class PasswordsViewModel(
             _operationStatus.value = Resource.Success(Unit)
         }
     }
+
     class Factory(
         private val application: Application,
         private val userRepository: UserRepository,
@@ -203,7 +213,8 @@ class PasswordsViewModel(
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(PasswordsViewModel::class.java)) {
-                val localRepository = PasswordLocalRepository.getInstance(application.applicationContext)
+                val localRepository =
+                    PasswordLocalRepository.getInstance(application.applicationContext)
                 @Suppress("UNCHECKED_CAST")
                 return PasswordsViewModel(userRepository, localRepository, firebaseRepository) as T
             }

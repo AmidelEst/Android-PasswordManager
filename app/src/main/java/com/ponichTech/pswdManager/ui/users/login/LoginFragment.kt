@@ -38,11 +38,13 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
+
         return binding.root
     }
     // 2)ViewCreated
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         binding.btnLogin.setOnClickListener {
             val email = binding.emailInput.text.toString()
@@ -54,7 +56,7 @@ class LoginFragment : Fragment() {
                 Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show()
             }
         }
-
+        //GOTO -
         binding.tvSignup.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
