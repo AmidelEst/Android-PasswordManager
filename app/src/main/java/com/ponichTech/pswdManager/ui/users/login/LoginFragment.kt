@@ -19,10 +19,11 @@ import com.ponichTech.pswdManager.databinding.FragmentLoginBinding
 import com.ponichTech.pswdManager.ui.items.all_password_items.PasswordsViewModel
 import com.ponichTech.pswdManager.ui.items.all_password_items.PasswordsViewModelFactory
 import com.ponichTech.pswdManager.utils.Resource
+import com.ponichTech.pswdManager.utils.autoCleared
 
 class LoginFragment : Fragment() {
 
-    private var binding: FragmentLoginBinding? = null
+    private var binding: FragmentLoginBinding by autoCleared()
     private val loginViewModel: LoginViewModel by viewModels {
         LoginViewModel.Factory(UserRepositoryFirebase())
     }
@@ -33,21 +34,21 @@ class LoginFragment : Fragment() {
             PasswordFirebaseRepository()
         )
     }
-
+    // 1)CreateView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
-        return binding?.root
+        return binding.root
     }
-
+    // 2)ViewCreated
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding?.btnLogin?.setOnClickListener {
-            val email = binding?.etEmail?.text.toString()
-            val password = binding?.etPassword?.text.toString()
+        binding.btnLogin.setOnClickListener {
+            val email = binding.etEmail.text.toString()
+            val password = binding.etPassword.text.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 loginViewModel.loginUser(email, password, viewModel)
@@ -56,7 +57,7 @@ class LoginFragment : Fragment() {
             }
         }
 
-        binding?.tvSignup?.setOnClickListener {
+        binding.tvSignup.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
@@ -64,21 +65,18 @@ class LoginFragment : Fragment() {
             when (resource) {
                 is Resource.Success -> {
                     Toast.makeText(requireContext(), "Login successful", Toast.LENGTH_SHORT).show()
+                    //GOTO - login -> AllItems
                     findNavController().navigate(R.id.action_loginFragment_to_allItemsFragment)
                 }
                 is Resource.Error -> {
                     Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Loading -> {
-                    binding?.loginProgressBar?.isVisible = true
-                    binding?.btnLogin?.isEnabled = false
+                    binding.loginProgressBar.isVisible = true
+                    binding.btnLogin.isEnabled = false
                 }
             }
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
-    }
 }

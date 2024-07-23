@@ -36,7 +36,7 @@ class DetailPasswordItemFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout using view binding
         binding = FragmentDetailPasswordItemBinding.inflate(inflater, container, false)
         //Detail -> EditSingle
