@@ -25,7 +25,9 @@ class LoginFragment : Fragment() {
 
     private var binding: FragmentLoginBinding by autoCleared()
 
-    private val loginViewModel: LoginViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels {
+        LoginViewModel.Factory(UserRepositoryFirebase())
+    }
 
     // 1)CreateView
     override fun onCreateView(
@@ -50,7 +52,7 @@ class LoginFragment : Fragment() {
                 Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show()
             }
         }
-        //GOTO -
+        //GOTO - loginFragment -> register
         binding.tvSignup.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }

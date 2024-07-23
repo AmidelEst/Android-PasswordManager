@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.ponichTech.pswdManager.data.model.User
 import com.ponichTech.pswdManager.data.repository.user_repository.UserRepository
+import com.ponichTech.pswdManager.data.repository.user_repository.UserRepositoryFirebase
 import com.ponichTech.pswdManager.ui.passwords.all_passwords.PasswordsViewModel
 import com.ponichTech.pswdManager.utils.Resource
 import com.ponichTech.pswdManager.utils.safeCall
@@ -20,7 +21,17 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
     fun loginUser(email: String, password: String) {
         viewModelScope.launch {
             _currentUser.value = Resource.Loading()
-            _currentUser.value =  userRepository.login(email, password)
+            val result = safeCall { userRepository.login(email, password) }
+            _currentUser.value = result
+        }
+    }
+    class Factory(private val userRepository: UserRepositoryFirebase) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return LoginViewModel(userRepository) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 }
