@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.ponichTech.pswdManager.R
 import com.ponichTech.pswdManager.databinding.EditProfileBinding
 
 
@@ -39,6 +41,9 @@ class EditProfileFragment : Fragment() {
 
         binding.imageBtn.setOnClickListener {
             pickImageLauncher.launch(arrayOf("image/*"))
+        }
+        binding.editProfileSaveBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_editProfileFragment_to_profileFragment)
         }
 
         return binding.root
