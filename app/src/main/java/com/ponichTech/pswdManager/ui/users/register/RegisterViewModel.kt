@@ -7,11 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.ponichTech.pswdManager.data.model.User
-import com.ponichTech.pswdManager.data.repository.user_repository.UserRepository
+import com.ponichTech.pswdManager.data.repository.auth_repository_firebase.AuthRepository
 import com.ponichTech.pswdManager.utils.Resource
 import kotlinx.coroutines.launch
 
-class RegisterViewModel(private val repository: UserRepository) : ViewModel() {
+class RegisterViewModel(private val repository: AuthRepository) : ViewModel() {
 
     private val _registerStatus = MutableLiveData<Resource<User>>()
     val registerStatus: LiveData<Resource<User>> = _registerStatus
@@ -32,7 +32,7 @@ class RegisterViewModel(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    class Factory(private val repo: UserRepository) : ViewModelProvider.NewInstanceFactory() {
+    class Factory(private val repo: AuthRepository) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
             if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {

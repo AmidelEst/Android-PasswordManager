@@ -10,7 +10,6 @@ interface PasswordsRepository {
     suspend fun addPassword(item: PasswordItem):Resource<*>
     suspend fun updatePassword(item: PasswordItem):Resource<Unit>
     suspend fun deletePassword(item: PasswordItem): Resource<Unit>
-    suspend fun getPassword(id: String): Resource<PasswordItem>
 
     fun getPasswordsLiveData(userId:String): LiveData<Resource<List<PasswordItem>>>
 }

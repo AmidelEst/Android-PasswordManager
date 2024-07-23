@@ -1,7 +1,6 @@
-package com.ponichTech.pswdManager.data.repository.user_repository
+package com.ponichTech.pswdManager.data.repository.auth_repository_firebase
 
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ponichTech.pswdManager.data.model.User
 import com.ponichTech.pswdManager.utils.Resource
@@ -10,10 +9,22 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-class UserRepositoryFirebase : UserRepository {
+class AuthRepositoryFirebase : AuthRepository {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val firebase = FirebaseFirestore.getInstance()
+
+
+    // getCurrentUser
+    override suspend fun getCurrentUser(): Resource<User> {
+        return withContext(Dispatchers.IO) {
+            safeCall {
+                val user = firebase.collection("users").document(firebaseAuth.currentUser!!.uid)
+                    .get().await().toObject(User::class.java)
+                Resource.Success(user!!)
+            }
+        }
+    }
 
     // registerUser
     override suspend fun registerUser(
@@ -48,16 +59,7 @@ class UserRepositoryFirebase : UserRepository {
         }
     }
 
-    // getCurrentUser
-    override suspend fun getCurrentUser(): Resource<User> {
-        return withContext(Dispatchers.IO) {
-            safeCall {
-                val user = firebase.collection("users").document(firebaseAuth.currentUser!!.uid)
-                    .get().await().toObject(User::class.java)
-                Resource.Success(user!!)
-            }
-        }
-    }
+
 
     //logout
     override fun logout() {

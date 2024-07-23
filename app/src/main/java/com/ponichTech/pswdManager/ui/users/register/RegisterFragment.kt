@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ponichTech.pswdManager.R
-import com.ponichTech.pswdManager.data.repository.user_repository.UserRepositoryFirebase
+import com.ponichTech.pswdManager.data.repository.auth_repository_firebase.AuthRepositoryFirebase
 import com.ponichTech.pswdManager.databinding.FragmentRegisterBinding
 import com.ponichTech.pswdManager.utils.Resource
 import com.ponichTech.pswdManager.utils.autoCleared
@@ -20,7 +20,7 @@ class RegisterFragment : Fragment(){
     private var binding : FragmentRegisterBinding by autoCleared()
 
     private val viewModel : RegisterViewModel by viewModels {
-        RegisterViewModel.Factory(UserRepositoryFirebase())
+        RegisterViewModel.Factory(AuthRepositoryFirebase())
     }
     // 1)onCreateView
     override fun onCreateView(

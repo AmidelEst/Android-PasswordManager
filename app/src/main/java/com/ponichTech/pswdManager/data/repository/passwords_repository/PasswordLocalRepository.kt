@@ -23,9 +23,6 @@ class PasswordLocalRepository(private val passwordItemDao: PasswordItemDao) : Pa
             }
     }
 
-    override suspend fun getPassword(id: String): Resource<PasswordItem> {
-        return Resource.Success(passwordItemDao.getPassword(id))
-    }
 
     override suspend fun addPassword(item: PasswordItem): Resource<PasswordItem> {
         passwordItemDao.addPassword(item)
