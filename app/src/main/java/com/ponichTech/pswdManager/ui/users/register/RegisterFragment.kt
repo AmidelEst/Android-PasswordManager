@@ -29,12 +29,14 @@ class RegisterFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentRegisterBinding.inflate(inflater,container,false)
-
         binding.btnRegister.setOnClickListener {
-            viewModel.createUser(binding.etName.text.toString(),
-                binding.etEmail.text.toString(),
-                binding.etPhone.text.toString(),
-                binding.etPassword.text.toString())
+            var name = binding.etName.text.toString()
+            var email = binding.etEmail.text.toString()
+            var phone =binding.etPhone.text.toString()
+            var password = binding.etPassword.text.toString()
+            if(validateUserInput(email,phone,password)){
+                viewModel.createUser(name,email,phone,password)
+            }
         }
 
         //Login Screen navigation:
@@ -67,4 +69,37 @@ class RegisterFragment : Fragment(){
         }
 
     }
+
+
+    private fun notifyUser(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun validateUserInput(email: String, phone: String, password: String): Boolean {
+        var isValid = true
+        // Validate email
+        val emailRegex = Regex("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")
+        if (!emailRegex.matches(email)) {
+            notifyUser("Missing or invalid email. Format should be x@x.com")
+            isValid = false
+        }
+        // Validate phone
+        val phoneRegex = Regex("^\\d+$")
+        if (!phoneRegex.matches(phone)) {
+            notifyUser("Missing or invalid phone number. It should contain only digits.")
+            isValid = false
+        }
+        // Validate password
+        if (password.length < 6) {
+            notifyUser("Password must be more than 6 characters.")
+            isValid = false
+        }
+        if (isValid) {
+            notifyUser("All inputs are valid!")
+        }
+        return isValid
+    }
+
+
 }
+
