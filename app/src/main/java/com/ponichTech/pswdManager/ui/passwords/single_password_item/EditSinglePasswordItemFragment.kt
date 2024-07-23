@@ -61,7 +61,7 @@ class EditSinglePasswordFragment : Fragment() {
                 // Load photo using Glide with circular crop
                 Glide.with(requireContext())
                     .load(it.photo)
-                    .error(R.drawable.ic_launcher_foreground) // Error image if loading fails
+                    .error(R.mipmap.ic_launcher) // Error image if loading fails
                     .circleCrop()
                     .into(binding.resultImage)
             }

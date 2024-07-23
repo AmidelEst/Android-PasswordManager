@@ -52,7 +52,13 @@ class DetailPasswordItemFragment : Fragment() {
                 binding.itemUserName.text = it.username
                 binding.itemNotes.text = it.notes
                 binding.itemPassword.text = it.password
-                Glide.with(requireContext()).load(it.photo).circleCrop().into(binding.itemImage)
+//                Glide.with(requireContext()).load(it.photo).circleCrop().into(binding.itemImage)
+                Glide.with(requireContext())
+                    .load(it.photo)
+                    .error(R.mipmap.ic_launcher)// Error image if loading fails
+                    .override(200, 200)
+                    .circleCrop() // Set the desired width and height in pixels
+                    .into(binding.itemImage)
             }
         }
     }

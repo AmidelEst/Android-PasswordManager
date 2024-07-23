@@ -49,7 +49,7 @@ class PasswordsAdapter(val callBack: PasswordListener)
             // Load photo using Glide with circular crop
             Glide.with(binding.root.context)
                 .load(item.photo)
-                .error(R.drawable.ic_launcher_foreground)// Error image if loading fails
+                .error(R.mipmap.ic_launcher)// Error image if loading fails
                 .override(200, 200)
                 .circleCrop() // Set the desired width and height in pixels
                 .into(binding.itemImage)
