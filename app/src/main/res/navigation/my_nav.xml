@@ -109,5 +109,9 @@
         android:id="@+id/editSinglePasswordItemFragment"
         android:name="com.ponichTech.pswdManager.ui.passwords.single_password_item.EditSinglePasswordFragment"
         android:label="edit_single_password_item"
-        tools:layout="@layout/edit_single_password_item" />
+        tools:layout="@layout/edit_single_password_item" >
+        <action
+            android:id="@+id/action_editSinglePasswordItemFragment_to_allPasswordsFragment"
+            app:destination="@id/allPasswordsFragment" />
+    </fragment>
 </navigation>

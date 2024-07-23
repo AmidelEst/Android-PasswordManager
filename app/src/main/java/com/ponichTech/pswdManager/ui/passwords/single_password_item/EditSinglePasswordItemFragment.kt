@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.ponichTech.pswdManager.R
 import com.ponichTech.pswdManager.data.repository.passwords_repository.PasswordFirebaseRepository
@@ -88,6 +89,9 @@ class EditSinglePasswordFragment : Fragment() {
                 // Update the password item in Firebase and local repository
                 viewModel.updatePasswordItem(updatedPasswordItem)
             }
+
+            findNavController().navigate(R.id.action_editSinglePasswordItemFragment_to_allPasswordsFragment)
+
         }
 
         return binding.root
