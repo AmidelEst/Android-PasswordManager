@@ -49,15 +49,15 @@ class LoginFragment : Fragment() {
             val email = binding?.etEmail?.text.toString()
             val password = binding?.etPassword?.text.toString()
 
-//            if (email.isNotEmpty() && password.isNotEmpty()) {
-//                loginViewModel.loginUser(email, password, viewModel)
-//            } else {
-//                Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show()
-//            }
-            //changed for making toasts in the bottom of the page
-            if(validateUserInput(email,password)){
+            if (email.isNotEmpty() && password.isNotEmpty()) {
                 loginViewModel.loginUser(email, password, viewModel)
+            } else {
+                Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show()
             }
+//            //changed for making toasts in the bottom of the page
+//            if(validateUserInput(email,password)){
+//                loginViewModel.loginUser(email, password, viewModel)
+//            }
 
         }
 
@@ -84,25 +84,25 @@ class LoginFragment : Fragment() {
 
     }
 
-    fun notifyUser(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun validateUserInput(email: String, password: String): Boolean {
-        var isValid = true
-        // Validate email
-        val emailRegex = Regex("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")
-        if (!emailRegex.matches(email)) {
-            notifyUser("Missing or invalid email. Format should be x@x.com")
-            isValid = false
-        }
-        // Validate password
-        if (password.length < 6) {
-            notifyUser("Password must be more than 6 characters.")
-            isValid = false
-        }
-        return isValid
-    }
+//    fun notifyUser(message: String) {
+//        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+//    }
+//
+//    private fun validateUserInput(email: String, password: String): Boolean {
+//        var isValid = true
+//        // Validate email
+//        val emailRegex = Regex("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")
+//        if (!emailRegex.matches(email)) {
+//            notifyUser("Missing or invalid email. Format should be x@x.com")
+//            isValid = false
+//        }
+//        // Validate password
+//        if (password.length < 6) {
+//            notifyUser("Password must be more than 6 characters.")
+//            isValid = false
+//        }
+//        return isValid
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
