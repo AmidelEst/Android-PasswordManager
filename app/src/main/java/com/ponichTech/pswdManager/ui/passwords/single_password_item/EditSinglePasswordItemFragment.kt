@@ -14,9 +14,9 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.ponichTech.pswdManager.R
 import com.ponichTech.pswdManager.data.repository.passwords_repository.PasswordFirebaseRepository
-import com.ponichTech.pswdManager.data.repository.user_repository.UserRepositoryFirebase
+import com.ponichTech.pswdManager.data.repository.auth_repository_firebase.AuthRepositoryFirebase
 import com.ponichTech.pswdManager.databinding.EditSinglePasswordItemBinding
-import com.ponichTech.pswdManager.ui.passwords.all_passwords.PasswordsViewModel
+import com.ponichTech.pswdManager.ui.passwords.all_passwords.AllPasswordsViewModel
 import com.ponichTech.pswdManager.utils.autoCleared
 
 class EditSinglePasswordFragment : Fragment() {
@@ -25,10 +25,10 @@ class EditSinglePasswordFragment : Fragment() {
 
     private var imageUri: Uri? = null
 
-    private val viewModel: PasswordsViewModel by activityViewModels {
-        PasswordsViewModel.Factory(
+    private val viewModel: AllPasswordsViewModel by activityViewModels {
+        AllPasswordsViewModel.Factory(
+            AuthRepositoryFirebase(),
             requireActivity().application,
-            UserRepositoryFirebase(),
             PasswordFirebaseRepository()
         )
     }

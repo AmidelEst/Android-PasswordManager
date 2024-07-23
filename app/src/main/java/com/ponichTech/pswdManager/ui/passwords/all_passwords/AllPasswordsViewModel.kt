@@ -13,13 +13,13 @@ import com.ponichTech.pswdManager.data.model.User
 import com.ponichTech.pswdManager.data.repository.passwords_repository.PasswordFirebaseRepository
 import com.ponichTech.pswdManager.data.repository.passwords_repository.PasswordLocalRepository
 import com.ponichTech.pswdManager.data.repository.passwords_repository.PasswordsRepository
-import com.ponichTech.pswdManager.data.repository.user_repository.UserRepository
+import com.ponichTech.pswdManager.data.repository.auth_repository_firebase.AuthRepository
 import com.ponichTech.pswdManager.utils.Resource
 import com.ponichTech.pswdManager.utils.safeCall
 import kotlinx.coroutines.launch
 
-class PasswordsViewModel(
-    private val userRepository: UserRepository,
+class AllPasswordsViewModel(
+    private val authRepository: AuthRepository,
     private val localRepository: PasswordsRepository,
     private val firebaseRepository: PasswordsRepository
 ) : ViewModel() {
@@ -27,8 +27,8 @@ class PasswordsViewModel(
     private val _selectedPasswordItem = MutableLiveData<PasswordItem?>()
     val selectedPasswordItem: LiveData<PasswordItem?> get() = _selectedPasswordItem
 
-    private val _currentUser = MutableLiveData<Resource<User>>()
-    val currentUser: LiveData<Resource<User>> get() = _currentUser
+    private var _loggedInUser = MutableLiveData<Resource<User>>()
+    val loggedInUser: LiveData<Resource<User>> get() = _loggedInUser
 
     private val _passwordItems = MutableLiveData<Resource<List<PasswordItem>>>()
     val passwordItems: LiveData<Resource<List<PasswordItem>>> get() = _passwordItems
@@ -36,36 +36,39 @@ class PasswordsViewModel(
     private val _operationStatus = MutableLiveData<Resource<Unit>>()
     val operationStatus: LiveData<Resource<Unit>> get() = _operationStatus
 
+    fun setLoggedInUser(resource :Resource<User>){
+        _loggedInUser.value = resource
+        val userId:String = _loggedInUser.value!!.data?.userId.toString()
+        fetchPasswordItems(userId)
+    }
+
     init {
         fetchCurrentUser()
     }
-
     fun selectPasswordItem(item: PasswordItem?) {
         _selectedPasswordItem.value = item
     }
 
     private fun fetchCurrentUser() {
         viewModelScope.launch {
-            _currentUser.value = Resource.Loading()
-            val result = userRepository.getCurrentUser()
-
-            if (result is Resource.Success) {
-                result.data?.let { fetchPasswordItems(it.userId) }
-                _currentUser.value = result
-            } else {
-                _currentUser.value = Resource.Error("Failed to fetch user")
-            }
+            _loggedInUser.value = Resource.Loading()
+            val result = authRepository.getCurrentUser()
+            _loggedInUser.value = result
+            val userId = _loggedInUser.value?.data?.userId.toString()
+            fetchPasswordItems(userId)
 
         }
     }
 
     fun fetchPasswordItems(userId: String) {
-        _passwordItems.value = Resource.Loading()
-        syncPasswords(userId)
-        localRepository.getPasswordsLiveData(userId).observeForever { resource ->
-            _passwordItems.value = resource
+        viewModelScope.launch {
+            localRepository.getPasswordsLiveData(userId).observeForever { resource ->
+//        syncPasswords(userId)
+                _passwordItems.value = resource
+            }
         }
     }
+
 
     fun addPasswordItem(passwordItem: PasswordItem) {
         viewModelScope.launch {
@@ -111,20 +114,17 @@ class PasswordsViewModel(
                     remove(passwordItem)
                 } ?: listOf()
                 _passwordItems.value = Resource.Success(updatedList)
-
-                val firebaseResult = safeCall { firebaseRepository.deletePassword(passwordItem) }
-                _operationStatus.value = firebaseResult
+                _operationStatus.value = firebaseRepository.deletePassword(passwordItem)
             } else {
                 _operationStatus.value = localResult
             }
         }
     }
-
     fun loginUser(email: String, password: String) {
         viewModelScope.launch {
-            _currentUser.value = Resource.Loading()
-            val result = userRepository.login(email, password)
-            _currentUser.value = result
+            _loggedInUser.value = Resource.Loading()
+            val result = authRepository.login(email, password)
+            _loggedInUser.value = result
 
             if (result is Resource.Success) {
                 result.data?.let { fetchPasswordItems(it.userId) }
@@ -134,10 +134,11 @@ class PasswordsViewModel(
         }
     }
 
+
     fun logoutUser() {
         viewModelScope.launch {
-            userRepository.logout()
-            _currentUser.value = Resource.Error("User logged out")
+            authRepository.logout()
+            _loggedInUser.value = Resource.Error("User logged out")
             _passwordItems.value = Resource.Error("User logged out")
         }
     }
@@ -203,16 +204,16 @@ class PasswordsViewModel(
     }
 
     class Factory(
+        private val authRepository: AuthRepository,
         private val application: Application,
-        private val userRepository: UserRepository,
-        private val firebaseRepository: PasswordFirebaseRepository
+        private val passwordsRepository: PasswordsRepository
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(PasswordsViewModel::class.java)) {
+            if (modelClass.isAssignableFrom(AllPasswordsViewModel::class.java)) {
                 val localRepository =
                     PasswordLocalRepository.getInstance(application.applicationContext)
                 @Suppress("UNCHECKED_CAST")
-                return PasswordsViewModel(userRepository, localRepository, firebaseRepository) as T
+                return AllPasswordsViewModel(authRepository, localRepository, passwordsRepository) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }

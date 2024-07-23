@@ -1,10 +1,10 @@
-package com.ponichTech.pswdManager.data.repository.user_repository
+package com.ponichTech.pswdManager.data.repository.auth_repository_firebase
 
 import com.ponichTech.pswdManager.data.model.User
 import com.ponichTech.pswdManager.utils.Resource
 
 
-interface UserRepository {
+interface AuthRepository {
 
     suspend fun registerUser(userName:String,
                              userEmail:String,

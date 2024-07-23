@@ -28,22 +28,13 @@ class PasswordFirebaseRepository : PasswordsRepository {
         }
     }
 
-    override suspend fun getPassword(id: String): Resource<PasswordItem> = withContext(Dispatchers.IO) {
-        safeCall {
-
-            // Get the document from Firestore, convert it to PasswordItem
-            val result = firestore.document(id).get().await()
-            val password = result.toObject(PasswordItem::class.java)
-            Resource.Success(password!!)
-        }
-    }
 
     // Retrieves PasswordItems and posts the result to the given LiveData
     override fun getPasswordsLiveData(userId: String):LiveData<Resource<List<PasswordItem>>>{
         data.postValue(Resource.Loading())
 
         // Add a snapshot listener to get real-time updates
-        firestore.collection("password_items").orderBy("serviceName").addSnapshotListener { snapshot, e ->
+        firestore.collection("password_items").whereEqualTo("userId", userId).orderBy("serviceName").addSnapshotListener { snapshot, e ->
             if (e != null) {
                 data.postValue(Resource.Error(e.localizedMessage ?: "Unknown error"))
             } else if (snapshot != null && !snapshot.isEmpty) {

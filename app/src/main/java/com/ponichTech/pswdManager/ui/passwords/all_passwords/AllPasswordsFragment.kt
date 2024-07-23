@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ponichTech.pswdManager.R
 import com.ponichTech.pswdManager.data.model.PasswordItem
 import com.ponichTech.pswdManager.data.repository.passwords_repository.PasswordFirebaseRepository
-import com.ponichTech.pswdManager.data.repository.user_repository.UserRepositoryFirebase
+import com.ponichTech.pswdManager.data.repository.auth_repository_firebase.AuthRepositoryFirebase
 import com.ponichTech.pswdManager.databinding.FragmentAllPasswordsItemsBinding
 import com.ponichTech.pswdManager.utils.Resource
 import com.ponichTech.pswdManager.utils.autoCleared
@@ -25,11 +25,11 @@ import com.ponichTech.pswdManager.utils.autoCleared
 class AllPasswordsFragment : Fragment() {
 
     private var binding: FragmentAllPasswordsItemsBinding by autoCleared()
-
-    private val viewModel: PasswordsViewModel by activityViewModels {
-        PasswordsViewModel.Factory(
+//    private val loginViewModel: LoginViewModel by viewModels()
+    private val allPasswordsViewModel: AllPasswordsViewModel by viewModels {
+        AllPasswordsViewModel.Factory(
+            AuthRepositoryFirebase(),
             requireActivity().application,
-            UserRepositoryFirebase(),
             PasswordFirebaseRepository()
         )
     }
@@ -40,7 +40,18 @@ class AllPasswordsFragment : Fragment() {
     ): View {
         binding = FragmentAllPasswordsItemsBinding.inflate(inflater, container, false)
 
-        viewModel.passwordItems.observe(viewLifecycleOwner, Observer { resource ->
+        // allPasswords -> addPasswords
+        binding.fab.setOnClickListener {
+            findNavController().navigate(R.id.action_allItemsFragment_to_addItemFragment)
+        }
+        return binding.root
+    }
+    //2)ViewCreated
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        allPasswordsViewModel.passwordItems.observe(viewLifecycleOwner, Observer { resource ->
             when (resource) {
                 is Resource.Loading -> {
                     binding.progressBar.isVisible = true
@@ -55,24 +66,13 @@ class AllPasswordsFragment : Fragment() {
                 }
             }
         })
-
-        // allPasswords -> addPasswords
-        binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.action_allItemsFragment_to_addItemFragment)
-        }
-        return binding.root
-    }
-    //2)ViewCreated
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         adapter = PasswordsAdapter(object : PasswordsAdapter.PasswordListener {
             override fun onItemClicked(passItems: PasswordItem) {
                 Toast.makeText(requireContext(), passItems.serviceName, Toast.LENGTH_SHORT).show()
             }
 
             override fun onItemLongClicked(passItems: PasswordItem) {
-                viewModel.selectPasswordItem(passItems)
+                allPasswordsViewModel.selectPasswordItem(passItems)
                 findNavController().navigate(R.id.action_allItemsFragment_to_detailItemFragment)
             }
         })
@@ -103,27 +103,13 @@ class AllPasswordsFragment : Fragment() {
                 builder.setTitle(getString(R.string.confirm_delete))
                     .setMessage(getString(R.string.confirmation_delete_all))
                     .setPositiveButton(getString(R.string.delete_exclamation_mark)) { _, _ ->
-                        viewModel.deletePasswordItem(item)
+                        allPasswordsViewModel.deletePasswordItem(item)
                     }
                     .setNegativeButton(android.R.string.cancel, null)
                     .show()
             }
         }).attachToRecyclerView(binding.recyclerView)
 
-        viewModel.currentUser.observe(viewLifecycleOwner, Observer { resource ->
-            when (resource) {
-                is Resource.Success -> {
-                    val user = resource.data
-                    user?.let { viewModel.fetchPasswordItems(user.userId) }
-                }
-                is Resource.Error -> {
-                    Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
-                }
-                is Resource.Loading -> {
-                    binding.progressBar.isVisible = true
-                }
-            }
-        })
 
     }
 }
