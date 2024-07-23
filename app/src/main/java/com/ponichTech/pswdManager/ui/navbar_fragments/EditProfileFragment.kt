@@ -3,7 +3,6 @@ package com.ponichTech.pswdManager.ui.navbar_fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,50 +63,45 @@ class EditProfileFragment : Fragment() {
             pickImageLauncher.launch(arrayOf("image/*"))
         }
 
-        // Observing the selected password item
         val user = viewModel.loggedInUser.value?.data
         binding.name?.setText(user?.name ?: "")
-
-//        binding.userName.toString().setText(user?.name)
         binding.email?.setText(user?.email ?: "")
-//        binding.editPassword?.text=user.
-
-
+        binding.password?.setText(user?.password ?: "")
         // Load photo using Glide with circular crop
-//        Glide.with(requireContext())
-//            .load(it.photo)
-//            .error(R.mipmap.ic_launcher) // Error image if loading fails
-//            .circleCrop()
-//            .into(binding.resultImage)
-
+        Glide.with(requireContext())
+            .load(user?.userPhoto)
+            .error(R.mipmap.ic_launcher) // Error image if loading fails
+            .circleCrop()
+            .into(binding.resultImage)
 
         // Save changes button
-//        binding.btnSaveChanges.setOnClickListener {
-//            viewModel.selectedPasswordItem.value?.let { item ->
-//                val updatedServiceName = binding.serviceName.text.toString()
-//                val updatedUserName = binding.userName.text.toString()
-//                val updatedNotes = binding.userNote.text.toString()
-//                val updatedPassword = binding.userPassword.text.toString()
-//                val updatedImageUri = imageUri?.toString() ?: item.photo
-//
-//                // Create an updated Password object
-//                val updatedPasswordItem = item.copy(
-//                    serviceName = updatedServiceName,
-//                    username = updatedUserName,
-//                    notes = updatedNotes,
-//                    password = updatedPassword,
-//                    photo = updatedImageUri
-//                )
-//
-//                // Update the password item in Firebase and local repository
-//                viewModel.updatePasswordItem(updatedPasswordItem)
-//            }
-//
-//            binding.editProfileSaveBtn.setOnClickListener {
-//                findNavController().navigate(R.id.action_editProfileFragment_to_profileFragment)
-//            }
-//
-//        }
+        binding.btnSave?.setOnClickListener {
+            viewModel.selectedPasswordItem.value?.let { item ->
+                val nameUpdated = user?.name
+                val emailUpdated = user?.email
+                val passwordUpdated = user?.password
+                val userPhotoUpdated = user?.userPhoto
+                val phoneUpdated =user?.phone
+//                imageUri?.toString() ?: item.photo
+
+                // Create an updated Password object
+                val updatedUser = user?.copy(
+                    name = nameUpdated!!,
+                    email = emailUpdated!!,
+                    password = passwordUpdated!!,
+                    userPhoto = userPhotoUpdated,
+                    phone = phoneUpdated,
+                )
+
+                // Update the password item in Firebase and local repository
+                viewModel.updateUser(updatedUser!!)
+            }
+
+            binding.btnSave?.setOnClickListener {
+                findNavController().navigate(R.id.action_editProfileFragment_to_profileFragment)
+            }
+
+        }
         return binding.root
     }
 

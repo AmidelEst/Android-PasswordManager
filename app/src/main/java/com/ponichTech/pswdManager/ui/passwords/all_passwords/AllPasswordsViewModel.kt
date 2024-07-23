@@ -36,15 +36,16 @@ class AllPasswordsViewModel(
     private val _operationStatus = MutableLiveData<Resource<Unit>>()
     val operationStatus: LiveData<Resource<Unit>> get() = _operationStatus
 
-    fun setLoggedInUser(resource :Resource<User>){
+    fun setLoggedInUser(resource: Resource<User>) {
         _loggedInUser.value = resource
-        val userId:String = _loggedInUser.value!!.data?.userId.toString()
+        val userId: String = _loggedInUser.value!!.data?.userId.toString()
         fetchPasswordItems(userId)
     }
 
     init {
         fetchCurrentUser()
     }
+
     fun selectPasswordItem(item: PasswordItem?) {
         _selectedPasswordItem.value = item
     }
@@ -105,6 +106,14 @@ class AllPasswordsViewModel(
         }
     }
 
+    fun updateUser(user: User) {
+        viewModelScope.launch {
+            _operationStatus.value = Resource.Loading()
+            val firebaseResult =  authRepository.updateUser(user)
+            Resource.Success(firebaseResult)
+        }
+    }
+
     fun deletePasswordItem(passwordItem: PasswordItem) {
         viewModelScope.launch {
             _operationStatus.value = Resource.Loading()
@@ -120,6 +129,7 @@ class AllPasswordsViewModel(
             }
         }
     }
+
     fun loginUser(email: String, password: String) {
         viewModelScope.launch {
             _loggedInUser.value = Resource.Loading()
@@ -213,7 +223,11 @@ class AllPasswordsViewModel(
                 val localRepository =
                     PasswordLocalRepository.getInstance(application.applicationContext)
                 @Suppress("UNCHECKED_CAST")
-                return AllPasswordsViewModel(authRepository, localRepository, passwordsRepository) as T
+                return AllPasswordsViewModel(
+                    authRepository,
+                    localRepository,
+                    passwordsRepository
+                ) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }

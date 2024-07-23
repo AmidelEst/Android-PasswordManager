@@ -59,6 +59,18 @@ class AuthRepositoryFirebase : AuthRepository {
         }
     }
 
+    // auto
+    override suspend fun updateUser(user: User): Resource<User> {
+        return withContext(Dispatchers.IO) {
+            safeCall {
+//                val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+//                val user = firebase.collection("users").document(result.user?.uid!!)
+//                    .get().await().toObject(User::class.java)!!
+                Resource.Success(user)
+            }
+        }
+    }
+
 
 
     //logout
