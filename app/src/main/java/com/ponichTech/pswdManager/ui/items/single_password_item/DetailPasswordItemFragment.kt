@@ -54,6 +54,7 @@ class DetailPasswordItemFragment : Fragment() {
                 binding.itemServiceName.text = it.serviceName
                 binding.itemUserName.text = it.username
                 binding.itemNotes.text = it.notes
+                binding.itemPassword.text = it.password
                 Glide.with(requireContext()).load(it.photo).circleCrop().into(binding.itemImage)
             }
         }
