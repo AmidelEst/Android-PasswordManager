@@ -94,6 +94,9 @@ class RegisterFragment : Fragment(){
             notifyUser("Password must be more than 6 characters.")
             isValid = false
         }
+        if (isValid) {
+            notifyUser("All inputs are valid!")
+        }
         return isValid
     }
 
