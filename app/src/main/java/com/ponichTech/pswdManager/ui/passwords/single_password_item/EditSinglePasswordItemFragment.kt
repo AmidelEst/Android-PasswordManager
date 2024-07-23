@@ -32,6 +32,7 @@ class EditSinglePasswordFragment : Fragment() {
             PasswordFirebaseRepository()
         )
     }
+
     private val pickImageLauncher: ActivityResultLauncher<Array<String>> =
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
             uri?.let {
