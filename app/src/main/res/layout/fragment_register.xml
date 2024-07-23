@@ -143,6 +143,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="36dp"
         android:clickable="true"
+        android:gravity="center"
         android:text="@string/already_have_an_account_login"
         android:textColor="@color/text"
         android:textSize="14sp" />

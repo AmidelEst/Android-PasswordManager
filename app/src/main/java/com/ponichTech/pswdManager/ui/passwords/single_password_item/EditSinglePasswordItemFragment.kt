@@ -36,6 +36,10 @@ class EditSinglePasswordFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
             uri?.let {
                 binding.resultImage.setImageURI(it)
+                Glide.with(requireContext())
+                    .load(it)
+                    .circleCrop()
+                    .into(binding.resultImage)
                 requireActivity().contentResolver.takePersistableUriPermission(
                     it,
                     Intent.FLAG_GRANT_READ_URI_PERMISSION
