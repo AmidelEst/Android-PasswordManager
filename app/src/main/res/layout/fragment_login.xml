@@ -7,11 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".ui.users.login.LoginFragment">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/gradient_background_dark"
-        android:orientation="vertical"
         android:padding="24dp">
 
         <TextView
@@ -25,84 +24,95 @@
             android:textColor="@color/text"
             android:textSize="32sp"
             android:textStyle="bold"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_weight="1">
-        <com.google.android.material.textfield.TextInputLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/loginCredentialsContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/email"
-            app:boxBackgroundMode="filled"
-            app:boxCornerRadiusBottomEnd="8dp"
-            app:boxCornerRadiusBottomStart="8dp"
-            app:boxCornerRadiusTopEnd="8dp"
-            app:boxCornerRadiusTopStart="8dp"
-            app:boxStrokeColor="@android:color/white"
-            app:hintTextColor="@color/hint_color_dark">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/email_input"
+            app:layout_constraintTop_toBottomOf="@id/tvWelcome">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tl_email_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:padding="16dp"
-                android:textColor="@color/button_background_dark"
-                app:hintTextColor="@color/hint_color_dark" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="@string/password"
-            app:boxBackgroundMode="filled"
-            app:boxCornerRadiusBottomEnd="8dp"
-            app:boxCornerRadiusBottomStart="8dp"
-            app:boxCornerRadiusTopEnd="8dp"
-            app:boxCornerRadiusTopStart="8dp"
-            app:boxStrokeColor="@color/button_background_dark"
-            app:hintTextColor="@color/hint_color_dark">
+                android:hint="@string/email"
+                app:boxBackgroundMode="filled"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxStrokeColor="@android:color/white"
+                app:hintTextColor="@color/hint_color_dark"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/password_input"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/email_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:padding="16dp"
+                    android:textColor="@color/button_background_dark"
+                    app:hintTextColor="@color/hint_color_dark" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tl_password_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
+                android:layout_marginTop="16dp"
+                android:hint="@string/password"
+                app:boxBackgroundMode="filled"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxStrokeColor="@color/button_background_dark"
+                app:hintTextColor="@color/hint_color_dark"
+                app:layout_constraintTop_toBottomOf="@id/tl_email_input">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:padding="16dp"
+                    app:hintTextColor="@color/hint_color_dark" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/secondary"
+                android:fontFamily="sans-serif-medium"
                 android:padding="16dp"
-                app:hintTextColor="@color/hint_color_dark" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="@string/login"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/tl_password_input"/>
 
-
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/secondary"
-            android:fontFamily="sans-serif-medium"
-            android:padding="16dp"
-            android:text="@string/login"
-            android:textColor="@android:color/white"
-            android:textStyle="bold" />
-
-        </LinearLayout>
-
-
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/loginProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:visibility="gone"
-            app:indicatorSize="48dp"
-            app:trackThickness="4dp"
             app:indicatorColor="@color/white"
+            app:indicatorSize="48dp"
+            app:layout_constraintBottom_toTopOf="@+id/tvSignup"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginCredentialsContent"
             app:trackColor="@color/yellow"
-            android:layout_gravity="center" />
+            app:trackThickness="4dp" />
 
         <TextView
             android:id="@+id/tvSignup"
@@ -114,6 +124,9 @@
             android:fontFamily="sans-serif"
             android:text="@string/sign_up_invitation"
             android:textColor="@color/text"
-            android:textSize="14sp" />
-    </LinearLayout>
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
