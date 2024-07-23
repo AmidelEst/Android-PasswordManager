@@ -55,4 +55,24 @@
     <string name="add_password">Add Password</string>
     <string name="note">Note:</string>
     <string name="already_have_an_account_login">Already have an account? Login</string>
+    <!--    ERROR MESSAGES-->
+    <string name="error_invalid_custom_token">Invalid custom token format.</string>
+    <string name="error_custom_token_mismatch">Custom token for a different audience.</string>
+    <string name="error_invalid_credential">Malformed credential.</string>
+    <string name="error_invalid_email">Badly formatted email address.</string>
+    <string name="error_wrong_password">Invalid password.</string>
+    <string name="error_user_mismatch">Credentials don\'t match the signed-in user.</string>
+    <string name="error_requires_recent_login">Requires recent authentication. Log in again.</string>
+    <string name="error_account_exists_with_different_credential">Email already associated with different credentials.</string>
+    <string name="error_email_already_in_use">Email already in use.</string>
+    <string name="error_credential_already_in_use">Credential already in use.</string>
+    <string name="error_user_disabled">User account disabled.</string>
+    <string name="error_user_token_expired">Credential expired. Sign in again.</string>
+    <string name="error_user_not_found">No user record found.</string>
+    <string name="error_invalid_user_token">Invalid credential. Sign in again.</string>
+    <string name="error_operation_not_allowed">Operation not allowed. Enable in console.</string>
+    <string name="error_weak_password">Password is too weak.</string>
+    <string name="error_unknown">An unknown error occurred.</string>
+
+
 </resources>

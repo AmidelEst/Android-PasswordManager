@@ -57,4 +57,24 @@
     <string name="note">הודעה:</string>
     <string name="already_have_an_account_login">כבר יש לך משתמש? לחץ כאן להתחבר</string>
     <string name="confirmation_logout">האם אתה בטוח שברצונך למחוק את כל הפריטים?</string>
+<!--    ERROR MESSAGES-->
+    <string name="error_invalid_custom_token">פורמט אינו חוקי.</string>
+    <string name="error_custom_token_mismatch">פורמט לא תואם.</string>
+    <string name="error_invalid_credential">פרטים לא נכונים.</string>
+    <string name="error_invalid_email">כתובת אימייל שגויה.</string>
+    <string name="error_wrong_password">סיסמה שגויה.</string>
+    <string name="error_user_mismatch">הפרטים לא תואמים את המשתמש המחובר.</string>
+    <string name="error_requires_recent_login">נדרש אימות מחדש. התחבר שוב.</string>
+    <string name="error_account_exists_with_different_credential">אימייל כבר מקושר לפרטים אחרים.</string>
+    <string name="error_email_already_in_use">אימייל בשימוש.</string>
+    <string name="error_credential_already_in_use">הפרטים כבר בשימוש.</string>
+    <string name="error_user_disabled">החשבון הושבת.</string>
+    <string name="error_user_token_expired">האישור פג תוקף. התחבר שוב.</string>
+    <string name="error_user_not_found">לא נמצא משתמש.</string>
+    <string name="error_invalid_user_token">לא חוקי. התחבר שוב.</string>
+    <string name="error_operation_not_allowed">הפעולה אינה מותרת. הפעל בלוח הבקרה.</string>
+    <string name="error_weak_password">הסיסמה חלשה מדי.</string>
+    <string name="error_unknown">שגיאה לא ידועה.</string>
+
+
 </resources>
