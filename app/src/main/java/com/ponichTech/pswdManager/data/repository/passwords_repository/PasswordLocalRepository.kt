@@ -1,14 +1,12 @@
-package com.ponichTech.pswdManager.data.repository.local_Repo
+package com.ponichTech.pswdManager.data.repository.passwords_repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import com.ponichTech.pswdManager.data.local_db.PasswordItemDao
 import com.ponichTech.pswdManager.data.local_db.PasswordItemDatabase
 import com.ponichTech.pswdManager.data.model.PasswordItem
-import com.ponichTech.pswdManager.data.repository.interfaces.PasswordsRepository
 import com.ponichTech.pswdManager.utils.Resource
 
 class PasswordLocalRepository(private val passwordItemDao: PasswordItemDao) : PasswordsRepository {

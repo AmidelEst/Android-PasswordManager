@@ -1,10 +1,10 @@
-package com.ponichTech.pswdManager.data.repository.interfaces
+package com.ponichTech.pswdManager.data.repository.passwords_repository
 
 import androidx.lifecycle.LiveData
 import com.ponichTech.pswdManager.data.model.PasswordItem
 import com.ponichTech.pswdManager.utils.Resource
 
-// Interface defining the operations for managing PasswordItem data
+// interface for managing password items.
 interface PasswordsRepository {
 
     suspend fun addPassword(item: PasswordItem):Resource<*>

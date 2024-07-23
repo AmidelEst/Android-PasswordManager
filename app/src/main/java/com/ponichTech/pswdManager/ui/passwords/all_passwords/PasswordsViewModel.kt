@@ -1,4 +1,4 @@
-package com.ponichTech.pswdManager.ui.items.all_password_items
+package com.ponichTech.pswdManager.ui.passwords.all_passwords
 
 import android.app.Application
 import androidx.lifecycle.LiveData
@@ -10,10 +10,10 @@ import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.ponichTech.pswdManager.data.model.PasswordItem
 import com.ponichTech.pswdManager.data.model.User
-import com.ponichTech.pswdManager.data.repository.firebase.PasswordFirebaseRepository
-import com.ponichTech.pswdManager.data.repository.interfaces.PasswordsRepository
-import com.ponichTech.pswdManager.data.repository.interfaces.UserRepository
-import com.ponichTech.pswdManager.data.repository.local_Repo.PasswordLocalRepository
+import com.ponichTech.pswdManager.data.repository.passwords_repository.PasswordFirebaseRepository
+import com.ponichTech.pswdManager.data.repository.passwords_repository.PasswordLocalRepository
+import com.ponichTech.pswdManager.data.repository.passwords_repository.PasswordsRepository
+import com.ponichTech.pswdManager.data.repository.user_repository.UserRepository
 import com.ponichTech.pswdManager.utils.Resource
 import com.ponichTech.pswdManager.utils.safeCall
 import kotlinx.coroutines.launch
@@ -74,7 +74,7 @@ class PasswordsViewModel(
                 updatedList.add(passwordItem)
                 _passwordItems.value = Resource.Success(updatedList)
 
-                val firebaseResult = safeCall { firebaseRepository.addPassword(localResult.data as PasswordItem) }
+                safeCall { firebaseRepository.addPassword(localResult.data as PasswordItem) }
                 _operationStatus.value = Resource.Success(Unit)
             } else {
                 _operationStatus.value = Resource.Error("")
@@ -139,6 +139,7 @@ class PasswordsViewModel(
             _passwordItems.value = Resource.Error("User logged out")
         }
     }
+
     private fun syncPasswords(userId: String) {
         viewModelScope.launch {
             _operationStatus.value = Resource.Loading()
@@ -195,24 +196,20 @@ class PasswordsViewModel(
             _operationStatus.value = Resource.Success(Unit)
         }
     }
-
-
-}
-
-class PasswordsViewModelFactory(
-    private val application: Application,
-    private val userRepository: UserRepository,
-    private val firebaseRepository: PasswordFirebaseRepository
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(PasswordsViewModel::class.java)) {
-            val localRepository = PasswordLocalRepository.getInstance(application.applicationContext)
-            @Suppress("UNCHECKED_CAST")
-            return PasswordsViewModel(userRepository, localRepository, firebaseRepository) as T
+    class Factory(
+        private val application: Application,
+        private val userRepository: UserRepository,
+        private val firebaseRepository: PasswordFirebaseRepository
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(PasswordsViewModel::class.java)) {
+                val localRepository = PasswordLocalRepository.getInstance(application.applicationContext)
+                @Suppress("UNCHECKED_CAST")
+                return PasswordsViewModel(userRepository, localRepository, firebaseRepository) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
-
 }
 
 

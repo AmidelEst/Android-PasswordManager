@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/addItemFragment"
-        android:name="com.ponichTech.pswdManager.ui.items.single_password_item.AddPasswordItemFragment"
+        android:name="com.ponichTech.pswdManager.ui.passwords.single_password_item.AddPasswordItemFragment"
         android:label="add_item_layout"
         tools:layout="@layout/fragment_add_password_item" >
         <action
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/allPasswordsFragment"
-        android:name="com.ponichTech.pswdManager.ui.items.all_password_items.AllPasswordsFragment"
+        android:name="com.ponichTech.pswdManager.ui.passwords.all_passwords.AllPasswordsFragment"
         android:label="all_items_layout"
         tools:layout="@layout/fragment_all_passwords_items" >
         <action
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailItemFragment"
-        android:name="com.ponichTech.pswdManager.ui.items.single_password_item.DetailPasswordItemFragment"
+        android:name="com.ponichTech.pswdManager.ui.passwords.single_password_item.DetailPasswordItemFragment"
         android:label="detail_item_layout"
         tools:layout="@layout/fragment_detail_password_item" >
         <action
@@ -107,7 +107,7 @@
     </fragment>
     <fragment
         android:id="@+id/editSinglePasswordItemFragment"
-        android:name="com.ponichTech.pswdManager.ui.items.single_password_item.EditSinglePasswordFragment"
+        android:name="com.ponichTech.pswdManager.ui.passwords.single_password_item.EditSinglePasswordFragment"
         android:label="edit_single_password_item"
         tools:layout="@layout/edit_single_password_item" />
 </navigation>

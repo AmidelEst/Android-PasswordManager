@@ -1,4 +1,4 @@
-package com.ponichTech.pswdManager.ui.items.all_password_items
+package com.ponichTech.pswdManager.ui.passwords.all_passwords
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,9 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ponichTech.pswdManager.R
 import com.ponichTech.pswdManager.data.model.PasswordItem
-import com.ponichTech.pswdManager.data.repository.firebase.PasswordFirebaseRepository
-import com.ponichTech.pswdManager.data.repository.firebase.UserRepositoryFirebase
-import com.ponichTech.pswdManager.data.repository.local_Repo.PasswordLocalRepository
+import com.ponichTech.pswdManager.data.repository.passwords_repository.PasswordFirebaseRepository
+import com.ponichTech.pswdManager.data.repository.user_repository.UserRepositoryFirebase
 import com.ponichTech.pswdManager.databinding.FragmentAllPasswordsItemsBinding
 import com.ponichTech.pswdManager.utils.Resource
 import com.ponichTech.pswdManager.utils.autoCleared
@@ -28,7 +27,7 @@ class AllPasswordsFragment : Fragment() {
     private var binding: FragmentAllPasswordsItemsBinding by autoCleared()
 
     private val viewModel: PasswordsViewModel by activityViewModels {
-        PasswordsViewModelFactory(
+        PasswordsViewModel.Factory(
             requireActivity().application,
             UserRepositoryFirebase(),
             PasswordFirebaseRepository()

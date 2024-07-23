@@ -11,24 +11,22 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ponichTech.pswdManager.R
-import com.ponichTech.pswdManager.data.local_db.PasswordItemDatabase
-import com.ponichTech.pswdManager.data.repository.firebase.PasswordFirebaseRepository
-import com.ponichTech.pswdManager.data.repository.firebase.UserRepositoryFirebase
-import com.ponichTech.pswdManager.data.repository.local_Repo.PasswordLocalRepository
+import com.ponichTech.pswdManager.data.repository.passwords_repository.PasswordFirebaseRepository
+import com.ponichTech.pswdManager.data.repository.user_repository.UserRepositoryFirebase
 import com.ponichTech.pswdManager.databinding.FragmentLoginBinding
-import com.ponichTech.pswdManager.ui.items.all_password_items.PasswordsViewModel
-import com.ponichTech.pswdManager.ui.items.all_password_items.PasswordsViewModelFactory
+import com.ponichTech.pswdManager.ui.passwords.all_passwords.PasswordsViewModel
 import com.ponichTech.pswdManager.utils.Resource
 import com.ponichTech.pswdManager.utils.autoCleared
 
 class LoginFragment : Fragment() {
 
     private var binding: FragmentLoginBinding by autoCleared()
+
     private val loginViewModel: LoginViewModel by viewModels {
         LoginViewModel.Factory(UserRepositoryFirebase())
     }
     private val viewModel: PasswordsViewModel by activityViewModels {
-        PasswordsViewModelFactory(
+        PasswordsViewModel.Factory(
             requireActivity().application,
             UserRepositoryFirebase(),
             PasswordFirebaseRepository()
@@ -38,7 +36,7 @@ class LoginFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -47,8 +45,8 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnLogin.setOnClickListener {
-            val email = binding.etEmail.text.toString()
-            val password = binding.etPassword.text.toString()
+            val email = binding.emailInput.text.toString()
+            val password = binding.passwordInput.text.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 loginViewModel.loginUser(email, password, viewModel)

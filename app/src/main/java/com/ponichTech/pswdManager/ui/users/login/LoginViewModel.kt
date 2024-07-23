@@ -2,8 +2,8 @@ package com.ponichTech.pswdManager.ui.users.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.ponichTech.pswdManager.data.repository.interfaces.UserRepository
-import com.ponichTech.pswdManager.ui.items.all_password_items.PasswordsViewModel
+import com.ponichTech.pswdManager.data.repository.user_repository.UserRepository
+import com.ponichTech.pswdManager.ui.passwords.all_passwords.PasswordsViewModel
 
 class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
 

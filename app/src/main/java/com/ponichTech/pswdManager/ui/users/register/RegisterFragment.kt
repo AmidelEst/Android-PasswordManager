@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ponichTech.pswdManager.R
-import com.ponichTech.pswdManager.data.repository.firebase.UserRepositoryFirebase
+import com.ponichTech.pswdManager.data.repository.user_repository.UserRepositoryFirebase
 import com.ponichTech.pswdManager.databinding.FragmentRegisterBinding
 import com.ponichTech.pswdManager.utils.Resource
 import com.ponichTech.pswdManager.utils.autoCleared
@@ -20,50 +20,51 @@ class RegisterFragment : Fragment(){
     private var binding : FragmentRegisterBinding by autoCleared()
 
     private val viewModel : RegisterViewModel by viewModels {
-        RegisterViewModel.RegisterViewModelFactory(UserRepositoryFirebase())
+        RegisterViewModel.Factory(UserRepositoryFirebase())
     }
-
+    // 1)onCreateView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentRegisterBinding.inflate(inflater,container,false)
-        binding.btnRegister.setOnClickListener {
-            var name = binding.etName.text.toString()
-            var email = binding.etEmail.text.toString()
-            var phone =binding.etPhone.text.toString()
-            var password = binding.etPassword.text.toString()
+        //registerButton
+        binding.registerButton.setOnClickListener {
+            val name = binding.nameInput.text.toString()
+            val email = binding.emailInput.text.toString()
+            val phone =binding.phoneInput.text.toString()
+            val password = binding.passwordInput.text.toString()
             if(validateUserInput(email,phone,password)){
-                viewModel.createUser(name,email,phone,password)
+                viewModel.registerUser(name,email,phone,password)
             }
         }
 
-        //Login Screen navigation:
+        //GOTO (1) - register -> login:
         binding.tvLogin.setOnClickListener{
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
         return binding.root
     }
 
-
+    //2)ViewCreated
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.userRegistrationStatus.observe(viewLifecycleOwner) {
-
-            when(it) {
+        viewModel.registerStatus.observe(viewLifecycleOwner) { resource ->
+            when(resource) {
                 is Resource.Loading -> {
                     binding.registerProgress.isVisible = true
-                    binding.btnRegister.isEnabled = false
+                    binding.registerButton.isEnabled = false
                 }
                 is Resource.Success -> {
                     Toast.makeText(requireContext(),"Registration successful",Toast.LENGTH_SHORT).show()
+                    //GOTO (2) - register -> allItems
                     findNavController().navigate(R.id.action_registerFragment_to_allItemsFragment)
                 }
                 is Resource.Error -> {
                     binding.registerProgress.isVisible = false
-                    binding.btnRegister.isEnabled = true
+                    binding.registerButton.isEnabled = true
                 }
             }
         }

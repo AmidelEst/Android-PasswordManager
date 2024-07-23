@@ -1,9 +1,8 @@
-package com.ponichTech.pswdManager.data.repository.firebase
+package com.ponichTech.pswdManager.data.repository.user_repository
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ponichTech.pswdManager.data.model.User
-import com.ponichTech.pswdManager.data.repository.interfaces.UserRepository
 import com.ponichTech.pswdManager.utils.Resource
 import com.ponichTech.pswdManager.utils.safeCall
 import kotlinx.coroutines.Dispatchers
@@ -13,29 +12,10 @@ import kotlinx.coroutines.withContext
 class UserRepositoryFirebase : UserRepository {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
-    private val userRef = FirebaseFirestore.getInstance().collection("users")
+    private val firebase = FirebaseFirestore.getInstance()
 
-    override suspend fun getCurrentUser(): Resource<User> {
-       return withContext(Dispatchers.IO) {
-           safeCall {
-               val user = userRef.document(firebaseAuth.currentUser!!.uid).get().await().toObject(User::class.java)
-               Resource.Success(user!!)
-           }
-       }
-    }
-
-    override suspend fun login(email: String, password: String): Resource<User> {
-        return withContext(Dispatchers.IO) {
-            safeCall {
-                val result  = firebaseAuth.signInWithEmailAndPassword(email,password).await()
-                val user = userRef.document(result.user?.uid!!).get().await().toObject(User::class.java)!!
-                Resource.Success(user)
-            }
-        }
-    }
-
-
-    override suspend fun createUser(
+    // registerUser
+    override suspend fun registerUser(
         userName: String,
         userEmail: String,
         userPhone: String,
@@ -47,13 +27,37 @@ class UserRepositoryFirebase : UserRepository {
                 val userId = registrationResult.user?.uid!!
                 // here we are getting the id from kotlin constructor
                 val newUser = User(name = userName,email = userEmail,phone = userPhone)
-                userRef.document(userId).set(newUser).await()
+                firebase.document(userId).set(newUser).await()
                 Resource.Success(newUser)
             }
 
         }
     }
 
+    // login
+    override suspend fun login(email: String, password: String): Resource<User> {
+        return withContext(Dispatchers.IO) {
+            safeCall {
+                val result  = firebaseAuth.signInWithEmailAndPassword(email,password).await()
+                val user = firebase.collection("users").document(result.user?.uid!!)
+                        .get().await().toObject(User::class.java)!!
+                Resource.Success(user)
+            }
+        }
+    }
+
+    // getCurrentUser
+    override suspend fun getCurrentUser(): Resource<User> {
+        return withContext(Dispatchers.IO) {
+            safeCall {
+                val user = firebase.collection("users").document(firebaseAuth.currentUser!!.uid)
+                        .get().await().toObject(User::class.java)
+                Resource.Success(user!!)
+            }
+        }
+    }
+
+    //logout
     override fun logout() {
         firebaseAuth.signOut()
     }

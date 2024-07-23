@@ -1,4 +1,4 @@
-package com.ponichTech.pswdManager.ui.items.all_password_items
+package com.ponichTech.pswdManager.ui.passwords.all_passwords
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -67,9 +67,7 @@ class PasswordsAdapter(val callBack: PasswordListener)
         }
     }
 
-
     fun itemAt(position: Int) = passItems[position]
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PassItemViewHolder(

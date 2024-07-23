@@ -45,7 +45,7 @@
             app:boxStrokeColor="@android:color/white"
             app:hintTextColor="@color/hint_color_dark">
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEmail"
+                android:id="@+id/email_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
@@ -67,7 +67,7 @@
             app:hintTextColor="@color/hint_color_dark">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPassword"
+                android:id="@+id/password_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
