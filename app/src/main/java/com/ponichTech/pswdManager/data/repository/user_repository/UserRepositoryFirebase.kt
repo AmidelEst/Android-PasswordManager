@@ -39,18 +39,11 @@ class UserRepositoryFirebase : UserRepository {
     // login
     override suspend fun login(email: String, password: String): Resource<User> {
         return withContext(Dispatchers.IO) {
-            val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
-            val userId = result.user?.uid
-            if (userId != null) {
-                val user = firebase.collection("users").document(userId)
-                    .get().await().toObject(User::class.java)
-                if (user != null) {
-                    Resource.Success(user)
-                } else {
-                    Resource.Error("User data not found")
-                }
-            } else {
-                Resource.Error("User ID is null")
+            safeCall {
+                val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+                val user = firebase.collection("users").document(result.user?.uid!!)
+                    .get().await().toObject(User::class.java)!!
+                Resource.Success(user)
             }
         }
     }

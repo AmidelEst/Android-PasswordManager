@@ -118,8 +118,6 @@ class AllPasswordsFragment : Fragment() {
                 }
                 is Resource.Error -> {
                     Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
-
-
                 }
                 is Resource.Loading -> {
                     binding.progressBar.isVisible = true
