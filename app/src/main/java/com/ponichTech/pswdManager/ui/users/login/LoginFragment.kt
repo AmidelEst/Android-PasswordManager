@@ -22,9 +22,6 @@ class LoginFragment : Fragment() {
 
     private var binding: FragmentLoginBinding by autoCleared()
 
-    private val loginViewModel: LoginViewModel by viewModels {
-        LoginViewModel.Factory(UserRepositoryFirebase())
-    }
     private val viewModel: PasswordsViewModel by activityViewModels {
         PasswordsViewModel.Factory(
             requireActivity().application,
@@ -51,7 +48,7 @@ class LoginFragment : Fragment() {
             val password = binding.passwordInput.text.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
-                loginViewModel.loginUser(email, password, viewModel)
+                viewModel.loginUser(email, password)
             } else {
                 Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show()
             }

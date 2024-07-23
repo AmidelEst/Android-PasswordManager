@@ -46,7 +46,7 @@ class PasswordsViewModel(
 
     private fun fetchCurrentUser() {
         viewModelScope.launch {
-            if (_currentUser.value != null) {
+            if (_currentUser.value == null) {
                 _currentUser.value = Resource.Loading()
                 val result = userRepository.getCurrentUser()
 
