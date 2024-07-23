@@ -68,8 +68,7 @@ class LoginFragment : Fragment() {
                     binding.loginProgressBar.isVisible = false
                     binding.btnLogin.isEnabled = true
                     resource.message?.let {
-                        Snackbar.make(binding.root,
-                            it, Snackbar.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(),resource.message,Toast.LENGTH_LONG).show()
                     }
                 }
                 is Resource.Loading -> {
