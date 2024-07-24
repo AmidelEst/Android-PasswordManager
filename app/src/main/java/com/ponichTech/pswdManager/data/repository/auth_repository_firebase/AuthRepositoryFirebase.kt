@@ -39,8 +39,8 @@ class AuthRepositoryFirebase : AuthRepository {
                     firebaseAuth.createUserWithEmailAndPassword(userEmail, userLoginPass).await()
                 val userId = registrationResult.user?.uid!!
                 // here we are getting the id from kotlin constructor
-                val newUser = User(name = userName, email = userEmail, phone = userPhone)
-                firebase.document(userId).set(newUser).await()
+                val newUser = User(name = userName, email = userEmail, phone = userPhone, password = userLoginPass)
+                firebase.collection("users").document(userId).set(newUser).await()
                 Resource.Success(newUser)
             }
 

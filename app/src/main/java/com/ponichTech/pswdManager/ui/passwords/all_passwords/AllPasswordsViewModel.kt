@@ -27,20 +27,14 @@ class AllPasswordsViewModel(
     private val _selectedPasswordItem = MutableLiveData<PasswordItem?>()
     val selectedPasswordItem: LiveData<PasswordItem?> get() = _selectedPasswordItem
 
-    private var _loggedInUser = MutableLiveData<Resource<User>>()
-    val loggedInUser: LiveData<Resource<User>> get() = _loggedInUser
+    private val _currentUser = MutableLiveData<Resource<User>>()
+    val currentUser: LiveData<Resource<User>> get() = _currentUser
 
     private val _passwordItems = MutableLiveData<Resource<List<PasswordItem>>>()
     val passwordItems: LiveData<Resource<List<PasswordItem>>> get() = _passwordItems
 
     private val _operationStatus = MutableLiveData<Resource<Unit>>()
     val operationStatus: LiveData<Resource<Unit>> get() = _operationStatus
-
-    fun setLoggedInUser(resource: Resource<User>) {
-        _loggedInUser.value = resource
-        val userId: String = _loggedInUser.value!!.data?.userId.toString()
-        fetchPasswordItems(userId)
-    }
 
     init {
         fetchCurrentUser()
@@ -52,24 +46,26 @@ class AllPasswordsViewModel(
 
     private fun fetchCurrentUser() {
         viewModelScope.launch {
-            _loggedInUser.value = Resource.Loading()
+            _currentUser.value = Resource.Loading()
             val result = authRepository.getCurrentUser()
-            _loggedInUser.value = result
-            val userId = _loggedInUser.value?.data?.userId.toString()
-            fetchPasswordItems(userId)
+
+            if (result is Resource.Success) {
+                result.data?.let { fetchPasswordItems(it.userId) }
+                _currentUser.value = result
+            } else {
+                _currentUser.value = Resource.Error("Failed to fetch user")
+            }
 
         }
     }
 
     fun fetchPasswordItems(userId: String) {
-        viewModelScope.launch {
-            localRepository.getPasswordsLiveData(userId).observeForever { resource ->
-//        syncPasswords(userId)
-                _passwordItems.value = resource
-            }
+        _passwordItems.value = Resource.Loading()
+        syncPasswords(userId)
+        localRepository.getPasswordsLiveData(userId).observeForever { resource ->
+            _passwordItems.value = resource
         }
     }
-
 
     fun addPasswordItem(passwordItem: PasswordItem) {
         viewModelScope.launch {
@@ -106,14 +102,6 @@ class AllPasswordsViewModel(
         }
     }
 
-    fun updateUser(user: User) {
-        viewModelScope.launch {
-            _operationStatus.value = Resource.Loading()
-            val firebaseResult =  authRepository.updateUser(user)
-            Resource.Success(firebaseResult)
-        }
-    }
-
     fun deletePasswordItem(passwordItem: PasswordItem) {
         viewModelScope.launch {
             _operationStatus.value = Resource.Loading()
@@ -123,7 +111,9 @@ class AllPasswordsViewModel(
                     remove(passwordItem)
                 } ?: listOf()
                 _passwordItems.value = Resource.Success(updatedList)
-                _operationStatus.value = firebaseRepository.deletePassword(passwordItem)
+
+                val firebaseResult = safeCall { firebaseRepository.deletePassword(passwordItem) }
+                _operationStatus.value = firebaseResult
             } else {
                 _operationStatus.value = localResult
             }
@@ -132,9 +122,9 @@ class AllPasswordsViewModel(
 
     fun loginUser(email: String, password: String) {
         viewModelScope.launch {
-            _loggedInUser.value = Resource.Loading()
+            _currentUser.value = Resource.Loading()
             val result = authRepository.login(email, password)
-            _loggedInUser.value = result
+            _currentUser.value = result
 
             if (result is Resource.Success) {
                 result.data?.let { fetchPasswordItems(it.userId) }
@@ -144,11 +134,10 @@ class AllPasswordsViewModel(
         }
     }
 
-
     fun logoutUser() {
         viewModelScope.launch {
             authRepository.logout()
-            _loggedInUser.value = Resource.Error("User logged out")
+            _currentUser.value = Resource.Error("User logged out")
             _passwordItems.value = Resource.Error("User logged out")
         }
     }
@@ -214,20 +203,16 @@ class AllPasswordsViewModel(
     }
 
     class Factory(
-        private val authRepository: AuthRepository,
         private val application: Application,
-        private val passwordsRepository: PasswordsRepository
+        private val authRepository: AuthRepository,
+        private val firebaseRepository: PasswordFirebaseRepository
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(AllPasswordsViewModel::class.java)) {
                 val localRepository =
                     PasswordLocalRepository.getInstance(application.applicationContext)
                 @Suppress("UNCHECKED_CAST")
-                return AllPasswordsViewModel(
-                    authRepository,
-                    localRepository,
-                    passwordsRepository
-                ) as T
+                return AllPasswordsViewModel(authRepository, localRepository, firebaseRepository) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }

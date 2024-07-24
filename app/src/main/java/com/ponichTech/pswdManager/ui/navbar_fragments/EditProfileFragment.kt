@@ -26,8 +26,8 @@ class EditProfileFragment : Fragment() {
 
     private val viewModel: AllPasswordsViewModel by activityViewModels {
         AllPasswordsViewModel.Factory(
-            AuthRepositoryFirebase(),
             requireActivity().application,
+            AuthRepositoryFirebase(),
             PasswordFirebaseRepository()
         )
     }
@@ -63,7 +63,7 @@ class EditProfileFragment : Fragment() {
             pickImageLauncher.launch(arrayOf("image/*"))
         }
 
-        val user = viewModel.loggedInUser.value?.data
+        val user = viewModel.currentUser.value?.data
         binding.name?.setText(user?.name ?: "")
         binding.email?.setText(user?.email ?: "")
         binding.password?.setText(user?.password ?: "")
@@ -94,7 +94,7 @@ class EditProfileFragment : Fragment() {
                 )
 
                 // Update the password item in Firebase and local repository
-                viewModel.updateUser(updatedUser!!)
+//                viewModel.updateUser(updatedUser!!)
             }
 
             binding.btnSave?.setOnClickListener {

@@ -22,8 +22,8 @@ class ProfileFragment : Fragment() {
 
     private val viewModel: AllPasswordsViewModel by activityViewModels {
         AllPasswordsViewModel.Factory(
-            AuthRepositoryFirebase(),
             requireActivity().application,
+            AuthRepositoryFirebase(),
             PasswordFirebaseRepository()
         )
     }
@@ -33,7 +33,7 @@ class ProfileFragment : Fragment() {
     ): View {
         binding = ProfileBinding.inflate(inflater, container, false)
 
-        val user = viewModel.loggedInUser.value?.data
+        val user = viewModel.currentUser.value?.data
         binding.profileUserName?.setText(user?.name ?: "")
         binding.email?.setText(user?.email ?: "")
         // Load photo using Glide with circular crop

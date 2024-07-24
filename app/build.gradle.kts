@@ -75,7 +75,6 @@ dependencies {
     implementation(libs.biometric)
     //passStrength
     implementation(libs.passwordstrength)
-
     //UI
     implementation(libs.material)
     implementation(libs.material3)

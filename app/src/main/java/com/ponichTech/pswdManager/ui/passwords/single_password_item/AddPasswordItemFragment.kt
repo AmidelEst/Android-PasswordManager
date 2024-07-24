@@ -35,8 +35,8 @@ class AddPasswordItemFragment : Fragment() {
 
     private val viewModel: AllPasswordsViewModel by activityViewModels {
         AllPasswordsViewModel.Factory(
-            AuthRepositoryFirebase(),
             requireActivity().application,
+            AuthRepositoryFirebase(),
             PasswordFirebaseRepository()
         )
     }
@@ -82,7 +82,7 @@ class AddPasswordItemFragment : Fragment() {
                 password = binding.passwordInput.text.toString(),
                 notes = binding.notesInput.text.toString(),
                 photo = imageUri.toString(),
-                userId =viewModel.loggedInUser.value?.data?.userId.toString()
+                userId =viewModel.currentUser.value?.data?.userId.toString()
             )
             //addingPasswordItem
             viewModel.addPasswordItem(passwordItem)

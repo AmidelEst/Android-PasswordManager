@@ -27,8 +27,8 @@ class EditSinglePasswordFragment : Fragment() {
 
     private val viewModel: AllPasswordsViewModel by activityViewModels {
         AllPasswordsViewModel.Factory(
-            AuthRepositoryFirebase(),
             requireActivity().application,
+            AuthRepositoryFirebase(),
             PasswordFirebaseRepository()
         )
     }
