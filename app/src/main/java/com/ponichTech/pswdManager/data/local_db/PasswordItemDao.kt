@@ -22,9 +22,6 @@ interface PasswordItemDao {
     @Query("SELECT * FROM password_items WHERE userId = :userId order by serviceName ASC")
     fun getPasswordsLiveData(userId: String):LiveData<List<PasswordItem>>
 
-    @Query("SELECT * from password_items where id like :id")
-    suspend fun getPassword(id:String): PasswordItem
-
     @Query("DELETE from password_items")
     suspend fun deleteAllPasswords()
 }

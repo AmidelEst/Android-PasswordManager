@@ -19,15 +19,41 @@ class PasswordFirebaseRepository : PasswordsRepository {
 
     private val data = MutableLiveData<Resource<List<PasswordItem>>>()
 
-    override suspend fun addPassword(item: PasswordItem): Resource<Unit> = withContext(Dispatchers.IO) {
+    override suspend fun addPassword(item: PasswordItem): Resource<PasswordItem> = withContext(Dispatchers.IO) {
         safeCall {
-//            val passId = firestore.collection("password_items").document().id // Generate From FireStore
-//            val newPass = item.copy(id = passId)
-            firestore.collection("password_items").add(item).await() // Set the new document with the generated ID
-            Resource.Success(Unit)
+            // Generate a new ID from Firestore
+            val id = firestore.collection("password_items").document().id
+
+            // Create a new item with the generated ID
+            val itemWithId = item.copy(id = id)
+
+            // Save the new item to FireStore
+            firestore.collection("password_items").document(id).set(itemWithId).await()
+
+            // Return the newly created item with its ID
+            Resource.Success(itemWithId)
         }
     }
 
+
+    override suspend fun updatePassword(item: PasswordItem): Resource<Unit> = withContext(Dispatchers.IO) {
+        safeCall {
+            if (item.id.isNotEmpty()) {
+                // Ensure the ID is not empty
+                firestore.collection("password_items").document(item.id).set(item).await()
+                Resource.Success(Unit)
+            } else {
+                Resource.Error("Item ID is empty, cannot update")
+            }
+        }
+    }
+
+    override suspend fun deletePassword(item: PasswordItem): Resource<Unit> = withContext(Dispatchers.IO) {
+        safeCall {
+            firestore.collection("password_items").document(item.id).delete().await()
+            Resource.Success(Unit)
+        }
+    }
 
     // Retrieves PasswordItems and posts the result to the given LiveData
     override fun getPasswordsLiveData(userId: String):LiveData<Resource<List<PasswordItem>>>{
@@ -61,20 +87,5 @@ class PasswordFirebaseRepository : PasswordsRepository {
             snapshotListener.remove()
         }
     }
-
-    override suspend fun updatePassword(item: PasswordItem): Resource<Unit> = withContext(Dispatchers.IO) {
-        safeCall {
-            firestore.collection("password_items").document(item.id).set(item).await()
-            Resource.Success(Unit)
-        }
-    }
-
-    override suspend fun deletePassword(item: PasswordItem): Resource<Unit> = withContext(Dispatchers.IO) {
-        safeCall {
-            firestore.collection("password_items").document(item.id).delete().await()
-            Resource.Success(Unit)
-        }
-    }
-
 
 }

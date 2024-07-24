@@ -13,6 +13,7 @@ import com.ponichTech.pswdManager.R
 import com.ponichTech.pswdManager.data.repository.auth_repository_firebase.AuthRepositoryFirebase
 import com.ponichTech.pswdManager.databinding.FragmentLoginBinding
 import com.ponichTech.pswdManager.utils.Resource
+import com.ponichTech.pswdManager.utils.SharedPreferencesUtil
 import com.ponichTech.pswdManager.utils.autoCleared
 
 class LoginFragment : Fragment() {
@@ -56,7 +57,7 @@ class LoginFragment : Fragment() {
                 is Resource.Success -> {
                     Toast.makeText(requireContext(), "Login successful", Toast.LENGTH_SHORT).show()
                     //GOTO - login -> AllItems
-                    loginViewModel.saveLoginState(requireContext(), true)
+                    SharedPreferencesUtil.updateLoginState(requireContext(), true)
                     findNavController().navigate(R.id.action_loginFragment_to_allItemsFragment)
                 }
                 is Resource.Error -> {

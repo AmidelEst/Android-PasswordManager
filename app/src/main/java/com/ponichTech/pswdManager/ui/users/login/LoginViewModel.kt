@@ -26,12 +26,7 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
             _currentUser.value = result
         }
     }
-    fun saveLoginState(context: Context, isLoggedIn: Boolean) {
-        val sharedPreferences = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putBoolean("isLoggedIn", isLoggedIn)
-        editor.apply()
-    }
+
     class Factory(private val userRepository: AuthRepositoryFirebase) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {

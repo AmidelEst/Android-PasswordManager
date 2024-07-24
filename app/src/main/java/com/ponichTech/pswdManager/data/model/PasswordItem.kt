@@ -6,7 +6,7 @@ import java.util.UUID
 
 @Entity(tableName = "password_items")
 data class PasswordItem(
-    @PrimaryKey val id:String = UUID.randomUUID().toString(),
+    @PrimaryKey val id:String = "",
     val serviceName: String = "",
     val username: String = "",
     val password: String = "",

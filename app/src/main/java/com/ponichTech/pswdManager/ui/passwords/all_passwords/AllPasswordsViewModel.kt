@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 class AllPasswordsViewModel(
     private val authRepository: AuthRepository,
     private val localRepository: PasswordsRepository,
-    private val firebaseRepository: PasswordsRepository
+    private val remoteRepository: PasswordsRepository
 ) : ViewModel() {
 
     private var _userId:String?=null
@@ -39,14 +39,14 @@ class AllPasswordsViewModel(
 
     private val _operationStatus = MutableLiveData<Resource<Unit>>()
 
-    fun logoutUser(context: Context) {
-        viewModelScope.launch {
-            SharedPreferencesUtil.updateLoginState(context, false)
-            authRepository.logout()
-            _currentUser.value = Resource.Error("User logged out")
-            _passwordItems.value = Resource.Error("User logged out")
-        }
-    }
+//    fun logoutUser(context: Context) {
+//        viewModelScope.launch {
+//            SharedPreferencesUtil.updateLoginState(context, false)
+//            authRepository.logout()
+//            _currentUser.value = Resource.Error("User logged out")
+//            _passwordItems.value = Resource.Error("User logged out")
+//        }
+//    }
 
     init {
         fetchCurrentUser()
@@ -87,19 +87,32 @@ class AllPasswordsViewModel(
     fun addPasswordItem(passwordItem: PasswordItem) {
         viewModelScope.launch {
             _operationStatus.value = Resource.Loading()
-            val localResult = safeCall { localRepository.addPassword(passwordItem) }
-            if (localResult is Resource.Success) {
-                val updatedList = _passwordItems.value?.data?.toMutableList() ?: mutableListOf()
-                updatedList.add(passwordItem)
-                _passwordItems.value = Resource.Success(updatedList)
 
-                safeCall { firebaseRepository.addPassword(localResult.data as PasswordItem) }
-                _operationStatus.value = Resource.Success(Unit)
+            // Step 1: Generate ID from FireStore and create the item with this ID
+            val remoteResult = remoteRepository.addPassword(passwordItem)
+
+            if (remoteResult is Resource.Success) {
+                // Step 2: Retrieve the newly created item with its FireStore ID
+                val createdItem = remoteResult.data as PasswordItem
+
+                // Step 3: Save the item locally in Room
+                val localResult = localRepository.addPassword(createdItem)
+
+                if (localResult is Resource.Success) {
+                    // Update the local list and UI
+                    val updatedList = _passwordItems.value?.data?.toMutableList() ?: mutableListOf()
+                    updatedList.add(createdItem)
+                    _passwordItems.value = Resource.Success(updatedList)
+                    _operationStatus.value = Resource.Success(Unit)
+                } else {
+                    _operationStatus.value = Resource.Error("Failed to save item locally")
+                }
             } else {
-                _operationStatus.value = Resource.Error("")
+                _operationStatus.value = Resource.Error("Failed to create item remotely")
             }
         }
     }
+
 
     fun updatePasswordItem(passwordItem: PasswordItem) {
         viewModelScope.launch {
@@ -111,7 +124,7 @@ class AllPasswordsViewModel(
                 } ?: listOf(passwordItem)
                 _passwordItems.value = Resource.Success(updatedList)
 
-                val firebaseResult = safeCall { firebaseRepository.updatePassword(passwordItem) }
+                val firebaseResult = safeCall { remoteRepository.updatePassword(passwordItem) }
                 _operationStatus.value = firebaseResult
             } else {
                 _operationStatus.value = localResult
@@ -129,7 +142,7 @@ class AllPasswordsViewModel(
                 } ?: listOf()
                 _passwordItems.value = Resource.Success(updatedList)
 
-                val firebaseResult = safeCall { firebaseRepository.deletePassword(passwordItem) }
+                val firebaseResult = safeCall { remoteRepository.deletePassword(passwordItem) }
                 _operationStatus.value = firebaseResult
             } else {
                 _operationStatus.value = localResult
@@ -151,7 +164,7 @@ class AllPasswordsViewModel(
             }
 
             // Fetch remote passwords
-            val remotePasswordsLiveData = firebaseRepository.getPasswordsLiveData(userId)
+            val remotePasswordsLiveData = remoteRepository.getPasswordsLiveData(userId)
 
             // Observe both LiveData objects simultaneously
             val mediatorLiveData =

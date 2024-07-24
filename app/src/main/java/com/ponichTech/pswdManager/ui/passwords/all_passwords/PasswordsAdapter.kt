@@ -68,7 +68,6 @@ class PasswordsAdapter(val callBack: PasswordListener)
     }
 
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PassItemViewHolder(
             PasswordItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)

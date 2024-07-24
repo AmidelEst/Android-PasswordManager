@@ -13,6 +13,7 @@ import com.ponichTech.pswdManager.R
 import com.ponichTech.pswdManager.data.repository.auth_repository_firebase.AuthRepositoryFirebase
 import com.ponichTech.pswdManager.databinding.FragmentRegisterBinding
 import com.ponichTech.pswdManager.utils.Resource
+import com.ponichTech.pswdManager.utils.SharedPreferencesUtil
 import com.ponichTech.pswdManager.utils.autoCleared
 
 class RegisterFragment : Fragment(){
@@ -60,6 +61,7 @@ class RegisterFragment : Fragment(){
                 is Resource.Success -> {
                     Toast.makeText(requireContext(),"Registration successful",Toast.LENGTH_SHORT).show()
                     //GOTO (2) - register -> allItems
+                    SharedPreferencesUtil.updateLoginState(requireContext(), true)
                     findNavController().navigate(R.id.action_registerFragment_to_allItemsFragment)
                 }
                 is Resource.Error -> {

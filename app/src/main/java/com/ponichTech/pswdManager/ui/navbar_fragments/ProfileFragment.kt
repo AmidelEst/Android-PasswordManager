@@ -14,6 +14,7 @@ import com.ponichTech.pswdManager.data.repository.passwords_repository.PasswordF
 import com.ponichTech.pswdManager.data.repository.auth_repository_firebase.AuthRepositoryFirebase
 import com.ponichTech.pswdManager.databinding.ProfileBinding
 import com.ponichTech.pswdManager.ui.passwords.all_passwords.AllPasswordsViewModel
+import com.ponichTech.pswdManager.utils.SharedPreferencesUtil
 import com.ponichTech.pswdManager.utils.autoCleared
 
 class ProfileFragment : Fragment() {
@@ -44,8 +45,9 @@ class ProfileFragment : Fragment() {
             .override(200,200) // Error image if loading fails
             .into(binding.profileImage)
 
-        //Profile -> login
+        //ProfileFrag ->logout() -> loginFrag
         binding.logoutButton.setOnClickListener{
+            SharedPreferencesUtil.updateLoginState(requireContext(), false)
             findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
         }
         //Profile -> editProfile
