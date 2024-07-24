@@ -47,6 +47,7 @@ class ProfileFragment : Fragment() {
 
         //ProfileFrag ->logout() -> loginFrag
         binding.logoutButton.setOnClickListener{
+            viewModel.logoutUser(requireContext())
             SharedPreferencesUtil.updateLoginState(requireContext(), false)
             findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
         }

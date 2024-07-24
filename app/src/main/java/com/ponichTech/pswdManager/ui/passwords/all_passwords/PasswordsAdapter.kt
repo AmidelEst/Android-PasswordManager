@@ -47,12 +47,21 @@ class PasswordsAdapter(val callBack: PasswordListener)
             Log.d("PasswordsAdapter", "Loading image from URL: ${item.photo}")
 
             // Load photo using Glide with circular crop
-            Glide.with(binding.root.context)
-                .load(item.photo)
-                .error(R.mipmap.ic_launcher)// Error image if loading fails
-                .override(200, 200)
-                .circleCrop() // Set the desired width and height in pixels
-                .into(binding.itemImage)
+            if (!item.photo.isNullOrEmpty()) {
+                Glide.with(binding.root.context)
+                    .load(item.photo)
+                    .error(R.mipmap.ic_launcher) // Error image if loading fails
+                    .override(200, 200) // Set the desired width and height in pixels
+                    .circleCrop()
+                    .into(binding.itemImage)
+            } else {
+                // Load a placeholder image if item.photo is null or empty
+                Glide.with(binding.root.context)
+                    .load(R.mipmap.ic_launcher) // Placeholder image
+                    .override(200, 200) // Set the desired width and height in pixels
+                    .circleCrop()
+                    .into(binding.itemImage)
+            }
         }
 
         // Handles item click event

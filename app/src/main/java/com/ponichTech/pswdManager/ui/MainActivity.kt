@@ -50,7 +50,6 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate called")
 
 
-
         // Setup the NavController
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment

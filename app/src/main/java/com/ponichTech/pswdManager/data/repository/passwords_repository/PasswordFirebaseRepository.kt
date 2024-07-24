@@ -56,19 +56,22 @@ class PasswordFirebaseRepository : PasswordsRepository {
     }
 
     // Retrieves PasswordItems and posts the result to the given LiveData
-    override fun getPasswordsLiveData(userId: String):LiveData<Resource<List<PasswordItem>>>{
+    override fun getPasswordsLiveData(userId: String): LiveData<Resource<List<PasswordItem>>> {
         data.postValue(Resource.Loading())
 
         // Add a snapshot listener to get real-time updates
-        firestore.collection("password_items").whereEqualTo("userId", userId).orderBy("serviceName").addSnapshotListener { snapshot, e ->
-            if (e != null) {
-                data.postValue(Resource.Error(e.localizedMessage ?: "Unknown error"))
-            } else if (snapshot != null && !snapshot.isEmpty) {
-                data.postValue(Resource.Success(snapshot.toObjects(PasswordItem::class.java)))
-            } else {
-                data.postValue(Resource.Error("No Data"))
+        firestore.collection("password_items")
+            .whereEqualTo("userId", userId)
+            .orderBy("serviceName")
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    data.postValue(Resource.Error(e.localizedMessage ?: "Unknown error"))
+                } else if (snapshot != null && !snapshot.isEmpty) {
+                    data.postValue(Resource.Success(snapshot.toObjects(PasswordItem::class.java)))
+                } else {
+                    data.postValue(Resource.Error("No Data"))
+                }
             }
-        }
         return data
     }
 

@@ -39,15 +39,6 @@ class AllPasswordsViewModel(
 
     private val _operationStatus = MutableLiveData<Resource<Unit>>()
 
-//    fun logoutUser(context: Context) {
-//        viewModelScope.launch {
-//            SharedPreferencesUtil.updateLoginState(context, false)
-//            authRepository.logout()
-//            _currentUser.value = Resource.Error("User logged out")
-//            _passwordItems.value = Resource.Error("User logged out")
-//        }
-//    }
-
     init {
         fetchCurrentUser()
     }
@@ -72,17 +63,18 @@ class AllPasswordsViewModel(
             } else {
                 _currentUser.value = Resource.Error("Failed to fetch user")
             }
-
         }
     }
     fun fetchPasswordItems(userId: String) {
         _passwordItems.value = Resource.Loading()
-        syncPasswords(userId)
-        localRepository.getPasswordsLiveData(userId).observeForever { resource ->
+//        syncPasswords(userId)
+//        localRepository.getPasswordsLiveData(userId).observeForever { resource ->
+//            _passwordItems.value = resource
+//        }
+        remoteRepository.getPasswordsLiveData(userId).observeForever { resource ->
             _passwordItems.value = resource
         }
     }
-
 
     fun addPasswordItem(passwordItem: PasswordItem) {
         viewModelScope.launch {
@@ -129,6 +121,14 @@ class AllPasswordsViewModel(
             } else {
                 _operationStatus.value = localResult
             }
+        }
+    }
+    fun logoutUser(context: Context) {
+        viewModelScope.launch {
+            SharedPreferencesUtil.updateLoginState(context, false)
+            authRepository.logout()
+            _currentUser.value = Resource.Error("User logged out")
+            _passwordItems.value = Resource.Error("User logged out")
         }
     }
 
