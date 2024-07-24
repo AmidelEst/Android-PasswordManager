@@ -34,8 +34,8 @@ class ProfileFragment : Fragment() {
         binding = ProfileBinding.inflate(inflater, container, false)
 
         val user = viewModel.currentUser.value?.data
-        binding.profileUserName?.setText(user?.name ?: "")
-        binding.email?.setText(user?.email ?: "")
+        binding.profileUserName.text = user?.name ?: ""
+        binding.email.text = user?.email ?: ""
         // Load photo using Glide with circular crop
         Glide.with(requireContext())
             .load(user?.userPhoto)
@@ -46,7 +46,6 @@ class ProfileFragment : Fragment() {
 
         //Profile -> login
         binding.logoutButton.setOnClickListener{
-            viewModel.logoutUser()
             findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
         }
         //Profile -> editProfile

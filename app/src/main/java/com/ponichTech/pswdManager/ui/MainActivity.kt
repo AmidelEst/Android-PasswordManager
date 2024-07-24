@@ -15,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.FirebaseApp
 import com.ponichTech.pswdManager.R
 import com.ponichTech.pswdManager.databinding.ActivityMainBinding
+import com.ponichTech.pswdManager.utils.SharedPreferencesUtil
 
 
 class MainActivity : AppCompatActivity() {
@@ -87,8 +88,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         // Check login state and navigate accordingly
-        val loginSharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-        val isLoggedIn = loginSharedPreferences.getBoolean("isLoggedIn", false)
+        val isLoggedIn = SharedPreferencesUtil.isLoggedIn(this)
         if (isLoggedIn) {
             navController.navigate(R.id.allPasswordsFragment)
         } else {

@@ -19,21 +19,20 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.ponichTech.pswdManager.R
 import com.ponichTech.pswdManager.databinding.SettingsBinding
+import com.ponichTech.pswdManager.utils.autoCleared
 
 
 class SettingsFragment : Fragment() {
 
-    private var _binding: SettingsBinding? = null
-    private val binding get() = _binding!!
+    private var binding: SettingsBinding by autoCleared()
+
     private lateinit var sharedPreferences: SharedPreferences
 
     //Biometric
     var isStronglySecured: Boolean = false
-    private var cancellationSignal:CancellationSignal? = null
-    private  val authenticationCallback: BiometricPrompt.AuthenticationCallback
-
-    get() =
-        object : BiometricPrompt.AuthenticationCallback() {
+    private var cancellationSignal: CancellationSignal? = null
+    private val authenticationCallback: BiometricPrompt.AuthenticationCallback
+        get() = object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 super.onAuthenticationError(errorCode, errString)
                 notifyUser("Authentication Error : $errString")
@@ -44,15 +43,17 @@ class SettingsFragment : Fragment() {
                 notifyUser("Authentication Success")
                 //This will execute after authentication
                 //if succeeded  turn the x icon into a v
-                isStronglySecured=true
-                if(isStronglySecured){
+                isStronglySecured = true
+                if (isStronglySecured) {
                     binding.isStronglySecured.setImageResource(R.drawable.v_circle_icon)
-                    binding.isStronglySecured.setColorFilter(ContextCompat.getColor(requireContext(),R.color.success),PorterDuff.Mode.SRC_IN)
+                    binding.isStronglySecured.setColorFilter(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.success
+                        ), PorterDuff.Mode.SRC_IN
+                    )
                 }
             }
-
-
-
         }
 
     override fun onCreateView(
@@ -60,7 +61,7 @@ class SettingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = SettingsBinding
+        binding = SettingsBinding
             .inflate(inflater, container, false)
 
         sharedPreferences = requireActivity().getSharedPreferences("ThemePrefs", 0)
@@ -100,13 +101,10 @@ class SettingsFragment : Fragment() {
 
             biometricPrompt.authenticate(promptInfo)
         }
-
-
         return binding.root
     }
 
-
-    private fun getCancellationSignal():CancellationSignal{
+    private fun getCancellationSignal(): CancellationSignal {
         cancellationSignal = CancellationSignal()
         cancellationSignal?.setOnCancelListener {
             notifyUser("Authentication was cancelled by the user")
@@ -114,19 +112,24 @@ class SettingsFragment : Fragment() {
         return cancellationSignal as CancellationSignal
     }
 
-    private fun checkBiometricSupport(): Boolean{
-        val keyguardManager = requireContext().getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-        if(keyguardManager.isKeyguardSecure){
+    private fun checkBiometricSupport(): Boolean {
+        val keyguardManager =
+            requireContext().getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+        if (keyguardManager.isKeyguardSecure) {
             notifyUser("Fingerprint authentication has not been enabled in settings")
             return false
         }
-        if(ActivityCompat.checkSelfPermission(requireContext(),android.Manifest.permission.USE_BIOMETRIC)!=PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.USE_BIOMETRIC
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             notifyUser("Fingerprint authentication permission is not enabled")
             return false
         }
-        return if (requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)){
+        return if (requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)) {
             true
-        }else true
+        } else true
     }
 
     private fun notifyUser(message: String) {
@@ -138,15 +141,10 @@ class SettingsFragment : Fragment() {
         editor.putBoolean("isDarkMode", isDarkMode)
         editor.apply()
     }
+
     private fun setNavigationBarColor(isDarkMode: Boolean) {
         val color = ContextCompat.getColor(requireContext(), R.color.background)
         requireActivity().window.navigationBarColor = color
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
 }

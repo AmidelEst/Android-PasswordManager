@@ -98,14 +98,26 @@ class AllPasswordsFragment : Fragment() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val item = adapter.itemAt(viewHolder.adapterPosition)
+                val position = viewHolder.adapterPosition
+                val item = adapter.itemAt(position)
+                // Temp removal
+                adapter.removeItem(position)
+
                 val builder = AlertDialog.Builder(requireContext())
                 builder.setTitle(getString(R.string.confirm_delete))
                     .setMessage(getString(R.string.confirmation_delete_all))
                     .setPositiveButton(getString(R.string.delete_exclamation_mark)) { _, _ ->
+                        // DELETE confirmed
                         viewModel.deletePasswordItem(item)
                     }
-                    .setNegativeButton(android.R.string.cancel, null)
+                    .setNegativeButton(android.R.string.cancel) { _, _ ->
+                        // User canceled -> re-insert + alert onCancel
+                        adapter.insertItem(position, item)
+                    }
+                    .setOnCancelListener {
+                        // Re-insert the item back into the adapter if the dialog is cancelled (outside touch or back button)
+                        adapter.insertItem(position, item)
+                    }
                     .show()
             }
         }).attachToRecyclerView(binding.recyclerView)
@@ -124,6 +136,5 @@ class AllPasswordsFragment : Fragment() {
                 }
             }
         })
-
     }
 }

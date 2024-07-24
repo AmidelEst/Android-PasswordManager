@@ -67,7 +67,7 @@ class PasswordsAdapter(val callBack: PasswordListener)
         }
     }
 
-    fun itemAt(position: Int) = passItems[position]
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PassItemViewHolder(
@@ -78,6 +78,18 @@ class PasswordsAdapter(val callBack: PasswordListener)
     override fun onBindViewHolder(holder: PassItemViewHolder, position: Int) =
         holder.bind(passItems[position])
 
-    // Returns the total number of items in the data set held by the adapter
+
     override fun getItemCount() = passItems.size
+
+    fun itemAt(position: Int) = passItems[position]
+
+    fun removeItem(position: Int) {
+        passItems.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    fun insertItem(position: Int, item: PasswordItem) {
+        passItems.add(position, item)
+        notifyItemInserted(position)
+    }
 }

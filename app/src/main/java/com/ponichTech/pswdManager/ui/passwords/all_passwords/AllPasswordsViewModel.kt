@@ -6,6 +6,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import android.content.Context
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.ponichTech.pswdManager.data.model.PasswordItem
@@ -15,6 +16,7 @@ import com.ponichTech.pswdManager.data.repository.passwords_repository.PasswordL
 import com.ponichTech.pswdManager.data.repository.passwords_repository.PasswordsRepository
 import com.ponichTech.pswdManager.data.repository.auth_repository_firebase.AuthRepository
 import com.ponichTech.pswdManager.utils.Resource
+import com.ponichTech.pswdManager.utils.SharedPreferencesUtil
 import com.ponichTech.pswdManager.utils.safeCall
 import kotlinx.coroutines.launch
 
@@ -36,7 +38,15 @@ class AllPasswordsViewModel(
     val passwordItems: LiveData<Resource<List<PasswordItem>>> get() = _passwordItems
 
     private val _operationStatus = MutableLiveData<Resource<Unit>>()
-    val operationStatus: LiveData<Resource<Unit>> get() = _operationStatus
+
+    fun logoutUser(context: Context) {
+        viewModelScope.launch {
+            SharedPreferencesUtil.updateLoginState(context, false)
+            authRepository.logout()
+            _currentUser.value = Resource.Error("User logged out")
+            _passwordItems.value = Resource.Error("User logged out")
+        }
+    }
 
     init {
         fetchCurrentUser()
@@ -127,27 +137,6 @@ class AllPasswordsViewModel(
         }
     }
 
-//    fun loginUser(email: String, password: String) {
-//        viewModelScope.launch {
-//            _currentUser.value = Resource.Loading()
-//            val result = authRepository.login(email, password)
-//            _currentUser.value = result
-//
-//            if (result is Resource.Success) {
-//                result.data?.let { fetchPasswordItems(it.userId) }
-//            } else {
-//                _passwordItems.value = Resource.Error("Failed to login user")
-//            }
-//        }
-//    }
-
-    fun logoutUser() {
-        viewModelScope.launch {
-            authRepository.logout()
-            _currentUser.value = Resource.Error("User logged out")
-            _passwordItems.value = Resource.Error("User logged out")
-        }
-    }
 
     private fun syncPasswords(userId: String) {
         viewModelScope.launch {
