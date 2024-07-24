@@ -24,6 +24,8 @@ class AllPasswordsViewModel(
     private val firebaseRepository: PasswordsRepository
 ) : ViewModel() {
 
+    private var _userId:String?=null
+
     private val _selectedPasswordItem = MutableLiveData<PasswordItem?>()
     val selectedPasswordItem: LiveData<PasswordItem?> get() = _selectedPasswordItem
 
@@ -45,12 +47,17 @@ class AllPasswordsViewModel(
     }
 
     private fun fetchCurrentUser() {
+        if(_userId==null){
+            _currentUser.value = Resource.Error("login or register")
+        }
         viewModelScope.launch {
             _currentUser.value = Resource.Loading()
             val result = authRepository.getCurrentUser()
-
             if (result is Resource.Success) {
-                result.data?.let { fetchPasswordItems(it.userId) }
+                result.data?.let {
+                    _userId = result.data.userId
+                    fetchPasswordItems(_userId!!)
+                }
                 _currentUser.value = result
             } else {
                 _currentUser.value = Resource.Error("Failed to fetch user")
@@ -58,7 +65,6 @@ class AllPasswordsViewModel(
 
         }
     }
-
     fun fetchPasswordItems(userId: String) {
         _passwordItems.value = Resource.Loading()
         syncPasswords(userId)
@@ -66,6 +72,7 @@ class AllPasswordsViewModel(
             _passwordItems.value = resource
         }
     }
+
 
     fun addPasswordItem(passwordItem: PasswordItem) {
         viewModelScope.launch {
@@ -120,19 +127,19 @@ class AllPasswordsViewModel(
         }
     }
 
-    fun loginUser(email: String, password: String) {
-        viewModelScope.launch {
-            _currentUser.value = Resource.Loading()
-            val result = authRepository.login(email, password)
-            _currentUser.value = result
-
-            if (result is Resource.Success) {
-                result.data?.let { fetchPasswordItems(it.userId) }
-            } else {
-                _passwordItems.value = Resource.Error("Failed to login user")
-            }
-        }
-    }
+//    fun loginUser(email: String, password: String) {
+//        viewModelScope.launch {
+//            _currentUser.value = Resource.Loading()
+//            val result = authRepository.login(email, password)
+//            _currentUser.value = result
+//
+//            if (result is Resource.Success) {
+//                result.data?.let { fetchPasswordItems(it.userId) }
+//            } else {
+//                _passwordItems.value = Resource.Error("Failed to login user")
+//            }
+//        }
+//    }
 
     fun logoutUser() {
         viewModelScope.launch {

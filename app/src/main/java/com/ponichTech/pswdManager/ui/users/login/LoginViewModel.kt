@@ -5,11 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+
+import android.content.Context
 import com.ponichTech.pswdManager.data.model.User
 import com.ponichTech.pswdManager.data.repository.auth_repository_firebase.AuthRepository
 import com.ponichTech.pswdManager.data.repository.auth_repository_firebase.AuthRepositoryFirebase
 import com.ponichTech.pswdManager.utils.Resource
-import com.ponichTech.pswdManager.utils.safeCall
+
 import kotlinx.coroutines.launch
 
 class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
@@ -20,9 +22,15 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
     fun loginUser(email: String, password: String) {
         viewModelScope.launch {
             _currentUser.value = Resource.Loading()
-            val result = safeCall { authRepository.login(email, password) }
+            val result = authRepository.login(email, password)
             _currentUser.value = result
         }
+    }
+    fun saveLoginState(context: Context, isLoggedIn: Boolean) {
+        val sharedPreferences = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("isLoggedIn", isLoggedIn)
+        editor.apply()
     }
     class Factory(private val userRepository: AuthRepositoryFirebase) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

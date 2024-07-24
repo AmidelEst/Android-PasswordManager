@@ -1,7 +1,6 @@
 package com.ponichTech.pswdManager.ui.users.login
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,13 +34,13 @@ class LoginFragment : Fragment() {
     // 2)ViewCreated
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //login
+        //login btn press
         binding.btnLogin.setOnClickListener {
             val email = binding.emailInput.text.toString()
-            Log.d("D",email)
             val password = binding.passwordInput.text.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
+                //login execution
                 loginViewModel.loginUser(email, password)
             } else {
                 Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show()
@@ -57,6 +56,7 @@ class LoginFragment : Fragment() {
                 is Resource.Success -> {
                     Toast.makeText(requireContext(), "Login successful", Toast.LENGTH_SHORT).show()
                     //GOTO - login -> AllItems
+                    loginViewModel.saveLoginState(requireContext(), true)
                     findNavController().navigate(R.id.action_loginFragment_to_allItemsFragment)
                 }
                 is Resource.Error -> {

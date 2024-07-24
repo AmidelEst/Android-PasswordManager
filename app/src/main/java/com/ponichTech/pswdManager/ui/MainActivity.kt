@@ -19,7 +19,6 @@ import com.ponichTech.pswdManager.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-
     private lateinit var navController: NavController
     companion object {
         private val TAG = MainActivity::class.java.name
@@ -87,10 +86,13 @@ class MainActivity : AppCompatActivity() {
                 else -> bottomNavigationView.visibility = View.VISIBLE
             }
         }
-
-
-
-
+        // Check login state and navigate accordingly
+        val loginSharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val isLoggedIn = loginSharedPreferences.getBoolean("isLoggedIn", false)
+        if (isLoggedIn) {
+            navController.navigate(R.id.allPasswordsFragment)
+        } else {
+            navController.navigate(R.id.loginFragment)
+        }
     }
-
 }
