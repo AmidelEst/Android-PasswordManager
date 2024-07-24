@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -28,7 +29,10 @@ class AddPasswordItemFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
             uri?.let {
                 binding.resultImage.setImageURI(it)
-                requireActivity().contentResolver.takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                requireActivity().contentResolver.takePersistableUriPermission(
+                    it,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
                 imageUri = it
             }
         }
@@ -42,7 +46,8 @@ class AddPasswordItemFragment : Fragment() {
     }
 
     //1) CreateView
-    override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentAddPasswordItemBinding.inflate(inflater, container, false)
         return binding.root
@@ -69,28 +74,59 @@ class AddPasswordItemFragment : Fragment() {
                 generatePasswordButton.visibility = View.GONE
             }
         }
-        generatePasswordButton.setOnClickListener{
+        generatePasswordButton.setOnClickListener {
             passwordInput.setText(generateStrongPassword(12))
             generatePasswordButton.visibility = View.GONE
         }
         ///////////////////////////////////////////////////
         // FinishBTN addPassword
         binding.finishBtn.setOnClickListener {
-            val passwordItem = PasswordItem(
-                serviceName = binding.serviceNameInput.text.toString(),
-                username = binding.usernameInput.text.toString(),
-                password = binding.passwordInput.text.toString(),
-                notes = binding.notesInput.text.toString(),
-                photo = imageUri.toString(),
-                userId =viewModel.currentUser.value?.data?.userId.toString()
-            )
-            //addingPasswordItem
-            viewModel.addPasswordItem(passwordItem)
-            //GOTO: addPassword -> allItemsFragment
-            findNavController().navigate(R.id.action_addItemFragment_to_allItemsFragment)
+            val serviceNameInput = binding.serviceNameInput.text.toString()
+            val usernameInput = binding.usernameInput.text.toString()
+            val passWordInput = binding.passwordInput.text.toString()
+            if (validateUserInput(serviceNameInput, usernameInput, passWordInput)) {
+                val passwordItem = PasswordItem(
+                    serviceName = serviceNameInput,
+                    username = usernameInput,
+                    password = passWordInput,
+                    notes = binding.notesInput.text.toString(),
+                    photo = imageUri.toString(),
+                    userId = viewModel.currentUser.value?.data?.userId.toString()
+                )
+
+                // addingPasswordItem
+                viewModel.addPasswordItem(passwordItem)
+                // GOTO: addPassword -> allItemsFragment
+                findNavController().navigate(R.id.action_addItemFragment_to_allItemsFragment)
+            }
         }
     }
+
+    private fun notifyUser(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun validateUserInput(
+        serviceName: String,
+        username: String,
+        password: String
+    ): Boolean {
+        var isValid = true
+        if (serviceName.isEmpty() || username.isEmpty() || username.isEmpty()) {
+            isValid = false
+            Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT)
+                .show()
+            // Validate password
+        } else if (password.length < 6) {
+            notifyUser("Password must be more than 6 characters.")
+            isValid = false
+        } else {
+            isValid = true
+        }
+        return isValid
+    }
 }
+
 fun generateStrongPassword(maxLength: Int): String {
     val upperCaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     val lowerCaseChars = "abcdefghijklmnopqrstuvwxyz"
@@ -107,7 +143,8 @@ fun generateStrongPassword(maxLength: Int): String {
     repeat(maxLength - 4) {
         sb.append(allChars.random())
     }
-
     return sb.toString().toList().shuffled().joinToString("")
 }
+
+
 

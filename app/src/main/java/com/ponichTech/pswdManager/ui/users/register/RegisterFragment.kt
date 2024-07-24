@@ -102,7 +102,5 @@ class RegisterFragment : Fragment(){
         }
         return isValid
     }
-
-
 }
 

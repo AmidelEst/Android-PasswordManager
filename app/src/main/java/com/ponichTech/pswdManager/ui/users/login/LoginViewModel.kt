@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 
-import android.content.Context
+
 import com.ponichTech.pswdManager.data.model.User
 import com.ponichTech.pswdManager.data.repository.auth_repository_firebase.AuthRepository
 import com.ponichTech.pswdManager.data.repository.auth_repository_firebase.AuthRepositoryFirebase
